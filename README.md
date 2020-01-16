@@ -1,2 +1,2 @@
-# smart_energy_chaincodes
+# Smart Energy Chaincodes
 Chaincodes for Smart Energy App
