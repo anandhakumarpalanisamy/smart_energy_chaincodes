@@ -8,4 +8,4 @@ export CORE_PEER_ADDRESS=$CORE_PEER_ADDRESS
 export CORE_PEER_MSPCONFIGPATH=$CORE_PEER_MSPCONFIGPATH
 export CORE_PEER_TLS_ROOTCERT_FILE=$CORE_PEER_TLS_ROOTCERT_FILE
 
-peer chaincode query -C appchannel -n carcc -c '{"Args":["listCars"]}'
+peer chaincode query -C appchannel -n energycc -c '{"Args":["listUsers"]}'
