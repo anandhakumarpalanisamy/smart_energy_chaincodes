@@ -19,7 +19,7 @@ class SmartEnergyUserAsset {
 
     // Car status: 0 = Ok, 1 = notOk, 2 = notChecked
 
-    async create(userId, userName, capacity, source, selling, postText, price,reserverPower, minSellingThreshold) {
+    async create(userId, userName, capacity, source, selling, postText, price,reserverPower, minSellingThreshold,sold,purchased,balance,rating) {
         assert(userId, 'userId not must be undefined');
         assert(userName, 'userName not must be undefined');
         assert(capacity, 'capacity not must be undefined');
@@ -29,6 +29,10 @@ class SmartEnergyUserAsset {
         assert(price, 'price not must be undefined');
         assert(reserverPower, 'reserverPower not must be undefined');
         assert(minSellingThreshold, 'minSellingThreshold not must be undefined');
+        assert(sold, 'sold not must be undefined');
+        assert(purchased, 'purchased not must be undefined');
+        assert(balance, 'balance not must be undefined');
+        assert(rating, 'rating not must be undefined');
         assert.equal(isNaN(selling), false, 'selling must be a number');
         assert.equal(isNaN(price), false, 'price of enrollment must be a number');
         assert.equal(isNaN(capacity), false, 'capacity must be a number');
@@ -45,12 +49,16 @@ class SmartEnergyUserAsset {
         user.minSellingThreshold = parseInt(minSellingThreshold);
         user.postText = postText;
         user.price = parseInt(price);
+        user.sold = parseInt(sold);
+        user.purchased = parseInt(purchased);
+        user.balance = parseInt(balance);
+        user.rating = rating;
         
 
         return user;
     }
 
-    async edit(userId, userName, capacity, source, selling, postText, price,reserverPower, minSellingThreshold) {
+    async edit(userId, userName, capacity, source, selling, postText, price,reserverPower, minSellingThreshold,sold,purchased,balance,rating) {
         assert(userId, 'userId not must be undefined');
         assert(userName, 'userName not must be undefined');
         assert(capacity, 'capacity not must be undefined');
@@ -75,6 +83,10 @@ class SmartEnergyUserAsset {
         user.minSellingThreshold = parseInt(minSellingThreshold);
         user.postText = postText;
         user.price = parseInt(price);
+        user.sold = parseInt(sold);
+        user.purchased = parseInt(purchased);
+        user.balance = parseInt(balance);
+        user.rating = rating;
 
         return user;
     }

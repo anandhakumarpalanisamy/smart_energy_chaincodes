@@ -64,7 +64,7 @@ class MyContract {
 
     async createUser(stub, args) {
         //let [userId, brand, model, colour, seats, yearOfEnrollment, observations] = args;
-        let [userId, userName, capacity, source, selling, postText, price,reserverPower, minSellingThreshold] = args;
+        let [userId, userName, capacity, source, selling, postText, price,reserverPower, minSellingThreshold, sold,purchased,balance,rating] = args;
         const exists = await myContract.assetExists(stub, userId);
         if (exists) {
             let user = await myContract.readAsset(stub, userId);
@@ -76,7 +76,7 @@ class MyContract {
         let cid = new ClientIdentity(stub);
         let userId = cid.getID();
 
-        let asset = await smartEnergyUserAsset.create(userId, userName, capacity, source, selling, postText, price,reserverPower, minSellingThreshold);
+        let asset = await smartEnergyUserAsset.create(userId, userName, capacity, source, selling, postText, price,reserverPower, minSellingThreshold),sold,purchased,balance,rating;
         let buffer = Buffer.from(JSON.stringify(asset));
         await stub.putState(userId, buffer);
 
@@ -85,7 +85,7 @@ class MyContract {
     }
 
     async updateUser(stub, args) {
-        let [userId, userName, capacity, source, selling, postText, price,reserverPower, minSellingThreshold] = args;
+        let [userId, userName, capacity, source, selling, postText, price,reserverPower, minSellingThreshold,sold,purchased,balance,rating] = args;
         
         const exists = await myContract.assetExists(stub, userId);
         if (!exists) {
@@ -102,7 +102,7 @@ class MyContract {
 
         // assert.equal(user.userId, userId, 'You can not edit this user');
 
-        const asset = await smartEnergyUserAsset.edit(userId, userName, capacity, source, selling, postText, price,reserverPower, minSellingThreshold);
+        const asset = await smartEnergyUserAsset.edit(userId, userName, capacity, source, selling, postText, price,reserverPower, minSellingThreshold, sold,purchased,balance,rating);
 
         const buffer = Buffer.from(JSON.stringify(asset));
         await stub.putState(userId, buffer);
