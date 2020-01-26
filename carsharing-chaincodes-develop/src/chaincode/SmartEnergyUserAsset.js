@@ -4,7 +4,7 @@ const assert = require('assert');
 
 let user = {
     docType: String,
-    userId: String,
+    energyUserId: String,
     userName: String,
     capacity: Number,
     selling: Number,
@@ -19,8 +19,8 @@ class SmartEnergyUserAsset {
 
     // Car status: 0 = Ok, 1 = notOk, 2 = notChecked
 
-    async create(userId, userName, capacity, source, selling, postText, price,reserverPower, minSellingThreshold,sold,purchased,balance,rating) {
-        assert(userId, 'userId not must be undefined');
+    async create(energyUserId, userName, capacity, source, selling, postText, price,reserverPower, minSellingThreshold,sold,purchased,balance,rating) {
+        assert(energyUserId, 'energyUserId not must be undefined');
         assert(userName, 'userName not must be undefined');
         assert(capacity, 'capacity not must be undefined');
         assert(source, 'source not must be undefined');
@@ -41,7 +41,7 @@ class SmartEnergyUserAsset {
         
 
         user.docType = 'user';
-        user.userId = userId;
+        user.energyUserId = energyUserId;
         user.userName = userName;
         user.capacity = parseInt(capacity);
         user.selling = parseInt(selling);
@@ -58,8 +58,8 @@ class SmartEnergyUserAsset {
         return user;
     }
 
-    async edit(userId, userName, capacity, source, selling, postText, price,reserverPower, minSellingThreshold,sold,purchased,balance,rating) {
-        assert(userId, 'userId not must be undefined');
+    async edit(energyUserId, userName, capacity, source, selling, postText, price,reserverPower, minSellingThreshold,sold,purchased,balance,rating) {
+        assert(energyUserId, 'energyUserId not must be undefined');
         assert(userName, 'userName not must be undefined');
         assert(capacity, 'capacity not must be undefined');
         assert(source, 'source not must be undefined');
@@ -75,7 +75,7 @@ class SmartEnergyUserAsset {
         assert.equal(isNaN(minSellingThreshold), false, 'minSellingThreshold must be a number');
         
         user.docType = 'user';
-        user.userId = userId;
+        user.energyUserId = energyUserId;
         user.userName = userName;
         user.capacity = parseInt(capacity);
         user.selling = parseInt(selling);

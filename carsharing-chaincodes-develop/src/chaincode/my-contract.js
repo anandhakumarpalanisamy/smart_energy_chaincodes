@@ -50,12 +50,12 @@ class MyContract {
 
 
     async createUser(stub, args) {
-        let [userId] = args;
+        let [energyUserId] = args;
 
-        let asset = await userAsset.create(userId);
+        let asset = await userAsset.create(energyUserId);
 
         let buffer = Buffer.from(JSON.stringify(asset));
-        await stub.putState(userId, buffer);
+        await stub.putState(energyUserId, buffer);
 
         return buffer;
     }
@@ -63,66 +63,66 @@ class MyContract {
     // // user ------------------------------------------------------------------------------
 
     async createUser(stub, args) {
-        //let [userId, brand, model, colour, seats, yearOfEnrollment, observations] = args;
-        let [userId, userName, capacity, source, selling, postText, price,reserverPower, minSellingThreshold, sold,purchased,balance,rating] = args;
-        const exists = await myContract.assetExists(stub, userId);
+        //let [energyUserId, brand, model, colour, seats, yearOfEnrollment, observations] = args;
+        let [energyUserId, userName, capacity, source, selling, postText, price,reserverPower, minSellingThreshold, sold,purchased,balance,rating] = args;
+        const exists = await myContract.assetExists(stub, energyUserId);
         if (exists) {
-            let user = await myContract.readAsset(stub, userId);
+            let user = await myContract.readAsset(stub, energyUserId);
             // if (user.notDeleted == true) {
-            //     throw new Error(`The my asset ${userId} exist`);
+            //     throw new Error(`The my asset ${energyUserId} exist`);
             // }
         }
 
         let cid = new ClientIdentity(stub);
-        let userId = cid.getID();
+        let energyUserId = cid.getID();
 
-        let asset = await smartEnergyUserAsset.create(userId, userName, capacity, source, selling, postText, price,reserverPower, minSellingThreshold),sold,purchased,balance,rating;
+        let asset = await smartEnergyUserAsset.create(energyUserId, userName, capacity, source, selling, postText, price,reserverPower, minSellingThreshold),sold,purchased,balance,rating;
         let buffer = Buffer.from(JSON.stringify(asset));
-        await stub.putState(userId, buffer);
+        await stub.putState(energyUserId, buffer);
 
 
         return buffer;
     }
 
     async updateUser(stub, args) {
-        let [userId, userName, capacity, source, selling, postText, price,reserverPower, minSellingThreshold,sold,purchased,balance,rating] = args;
+        let [energyUserId, userName, capacity, source, selling, postText, price,reserverPower, minSellingThreshold,sold,purchased,balance,rating] = args;
         
-        const exists = await myContract.assetExists(stub, userId);
+        const exists = await myContract.assetExists(stub, energyUserId);
         if (!exists) {
-            throw new Error(`The my asset ${userId} does not exist`);
+            throw new Error(`The my asset ${energyUserId} does not exist`);
         }
-        const user = await myContract.readAsset(stub, userId)
+        const user = await myContract.readAsset(stub, energyUserId)
         // if (user.notDeleted == false) {
         //     throw new Error(`You can not edit a user that is deleted`)
         // }
         // const notDeleted = user.notDeleted
 
         let cid = new ClientIdentity(stub);
-        let userId = cid.getID();
+        let energyUserId = cid.getID();
 
-        // assert.equal(user.userId, userId, 'You can not edit this user');
+        // assert.equal(user.energyUserId, energyUserId, 'You can not edit this user');
 
-        const asset = await smartEnergyUserAsset.edit(userId, userName, capacity, source, selling, postText, price,reserverPower, minSellingThreshold, sold,purchased,balance,rating);
+        const asset = await smartEnergyUserAsset.edit(energyUserId, userName, capacity, source, selling, postText, price,reserverPower, minSellingThreshold, sold,purchased,balance,rating);
 
         const buffer = Buffer.from(JSON.stringify(asset));
-        await stub.putState(userId, buffer);
+        await stub.putState(energyUserId, buffer);
 
         return buffer;
     }
 
     // async deleteuser(stub, args) {
-    //     let [userId] = args;
+    //     let [energyUserId] = args;
     //     let cid = new ClientIdentity(stub);
     //     let clientID = cid.getID();
-    //     const user = await myContract.readAsset(stub, userId)
-    //     assert.equal(user.userId, clientID, 'You cannot delete a user you dont own')
+    //     const user = await myContract.readAsset(stub, energyUserId)
+    //     assert.equal(user.energyUserId, clientID, 'You cannot delete a user you dont own')
 
     //     let queryString = {};
     //     queryString.selector = {};
     //     queryString.selector.docType = 'offer';
     //     queryString.selector.notDeleted = true;
     //     queryString.selector.user = {};
-    //     queryString.selector.user.userId = userId;
+    //     queryString.selector.user.energyUserId = energyUserId;
 
     //     const buffer = await myContract.getQueryResultForQueryString(stub, JSON.stringify(queryString));
     //     let offers = JSON.parse(buffer.toString());
@@ -131,7 +131,7 @@ class MyContract {
 
     //     const asset = await smartEnergyUserAsset.deleteuser(user, "false");
 
-    //     await myContract.saveAssetState(stub, userId, asset);
+    //     await myContract.saveAssetState(stub, energyUserId, asset);
     //     let bufferuser = Buffer.from(JSON.stringify(asset));
 
     //     return bufferuser;
@@ -144,7 +144,7 @@ class MyContract {
         let queryString = {};
         queryString.selector = {};
         queryString.selector.docType = 'user';
-        queryString.selector.userId = clientLogged;
+        queryString.selector.energyUserId = clientLogged;
         //queryString.selector.notDeleted = true;
 
         const buffer = await myContract.getQueryResultForQueryString(stub, JSON.stringify(queryString));
@@ -153,9 +153,9 @@ class MyContract {
     }
 
     async findOneUser(stub, args) {
-        let [userId] = args;
+        let [energyUserId] = args;
 
-        let asset = await myContract.readAsset(stub, userId);
+        let asset = await myContract.readAsset(stub, energyUserId);
         assert.equal(asset.docType, 'user', 'user not found');
         let buffer = Buffer.from(JSON.stringify(asset));
 
