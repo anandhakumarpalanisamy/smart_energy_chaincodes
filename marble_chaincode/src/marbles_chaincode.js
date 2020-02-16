@@ -64,8 +64,8 @@ let Chaincode = class {
   // initMarble - create a new marble
   // ===============================================
   async initMarble(stub, args, thisClass) {
-    if (args.length != 4) {
-      throw new Error('Incorrect number of arguments. Expecting 4');
+    if (args.length != 5) {
+      throw new Error('Incorrect number of arguments. Expecting 5');
     }
     // ==== Input sanitation ====
     console.info('--- start init marble ---')
@@ -376,8 +376,8 @@ let Chaincode = class {
         marbleFromTransfer.amount = marbleFromTransfer.amount - amount; //change the owner
     }
     
-    let marbleJSONasBytes = Buffer.from(JSON.stringify(marbleFromTransfer));
-    await stub.putState(from_user, marbleJSONasBytes); //rewrite the marble
+    let fromMarbleJSONasBytes = Buffer.from(JSON.stringify(marbleFromTransfer));
+    await stub.putState(from_user, fromMarbleJSONasBytes); //rewrite the marble
 
 
     let marbleToTransfer = {};
@@ -391,8 +391,8 @@ let Chaincode = class {
     console.info(marbleToTransfer);
     marbleToTransfer.amount = marbleToTransfer.amount + amount; //change the owner
 
-    let marbleJSONasBytes = Buffer.from(JSON.stringify(marbleToTransfer));
-    await stub.putState(to_user, marbleJSONasBytes); //rewrite the marble
+    let toMarbleJSONasBytes = Buffer.from(JSON.stringify(marbleToTransfer));
+    await stub.putState(to_user, toMarbleJSONasBytes); //rewrite the marble
 
 
 
