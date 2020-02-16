@@ -344,7 +344,7 @@ let Chaincode = class {
 
     let from_user = args[0];
     let to_user = args[1];
-    let amount = parseFloat(args[1]);
+    let amount = parseInt(args[2], 10);
     console.info('- start transferMarble ', from_user, to_user,amount);
 
     let fromuserAsBytes = await stub.getState(from_user);
