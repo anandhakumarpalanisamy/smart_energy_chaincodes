@@ -218,40 +218,6 @@ let Chaincode = class {
 
 
 
-  // ===========================================================
-  // transfer a marble by setting a new owner name on the marble
-  // ===========================================================
-  async transferMarble(stub, args, thisClass) {
-    //   0       1
-    // 'name', 'bob'
-    if (args.length < 2) {
-      throw new Error('Incorrect number of arguments. Expecting marblename and owner')
-    }
-
-    let marbleName = args[0];
-    let newOwner = args[1].toLowerCase();
-    console.info('- start transferMarble ', marbleName, newOwner);
-
-    let marbleAsBytes = await stub.getState(marbleName);
-    if (!marbleAsBytes || !marbleAsBytes.toString()) {
-      throw new Error('marble does not exist');
-    }
-    let marbleToTransfer = {};
-    try {
-      marbleToTransfer = JSON.parse(marbleAsBytes.toString()); //unmarshal
-    } catch (err) {
-      let jsonResp = {};
-      jsonResp.error = 'Failed to decode JSON of: ' + marbleName;
-      throw new Error(jsonResp);
-    }
-    console.info(marbleToTransfer);
-    marbleToTransfer.owner = newOwner; //change the owner
-
-    let marbleJSONasBytes = Buffer.from(JSON.stringify(marbleToTransfer));
-    await stub.putState(marbleName, marbleJSONasBytes); //rewrite the marble
-
-    console.info('- end transferMarble (success)');
-  }
 
   
   // ===========================================================================================
@@ -338,7 +304,7 @@ let Chaincode = class {
   async transfer_money(stub, args, thisClass) {
     //   0       1
     // 'name', 'bob'
-    if (args.length < 2) {
+    if (args.length < 3) {
       throw new Error('Incorrect number of arguments. Expecting from_user and owner')
     }
 
