@@ -9,5 +9,6 @@ export CORE_PEER_MSPCONFIGPATH=$CORE_PEER_MSPCONFIGPATH
 export CORE_PEER_TLS_ROOTCERT_FILE=$CORE_PEER_TLS_ROOTCERT_FILE
 
 
-peer chaincode invoke -C appchannel -n energycc -c '{"Args":["initMarble","marble1","blue","35","tom","100"]}' --tls --cafile ${CORE_PEER_TLS_ROOTCERT_FILE} &&
-peer chaincode invoke -C appchannel -n energycc -c '{"Args":["initMarble","marble2","green","45","ark","100"]}' --tls --cafile ${CORE_PEER_TLS_ROOTCERT_FILE}
+peer chaincode invoke -C appchannel -n energycc -c '{"Args":["initMarble","marble1","blue","35","tom","1000"]}' --tls --cafile ${CORE_PEER_TLS_ROOTCERT_FILE} &&
+peer chaincode invoke -C appchannel -n energycc -c '{"Args":["initMarble","marble2","green","35","tom","1000"]}' --tls --cafile ${CORE_PEER_TLS_ROOTCERT_FILE}
+#peer chaincode invoke -C appchannel -n energycc -c '{"Args":["transferMoney","marble1","marble2","45"]}' --tls --cafile ${CORE_PEER_TLS_ROOTCERT_FILE}
