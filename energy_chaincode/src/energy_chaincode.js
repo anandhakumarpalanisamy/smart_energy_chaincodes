@@ -301,7 +301,7 @@ let Chaincode = class {
     console.info('- end transferMarblesBasedOnColor: ' + responsePayload);
   }
 
-  async transferMoney(stub, args, thisClass) {
+  async buyEnergy(stub, args, thisClass) {
     //   0       1
     // 'name', 'bob'
     if (args.length < 3) {
@@ -359,13 +359,8 @@ let Chaincode = class {
 
     let toMarbleJSONasBytes = Buffer.from(JSON.stringify(marbleToTransfer));
     await stub.putState(to_user, toMarbleJSONasBytes); //rewrite the marble
-
-
-
-
-
-
     console.info('- end transferMarble (success)');
+    
   }
 
 

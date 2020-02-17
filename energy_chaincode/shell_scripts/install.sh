@@ -8,4 +8,4 @@ export CORE_PEER_ADDRESS=$CORE_PEER_ADDRESS
 export CORE_PEER_MSPCONFIGPATH=$CORE_PEER_MSPCONFIGPATH
 export CORE_PEER_TLS_ROOTCERT_FILE=$CORE_PEER_TLS_ROOTCERT_FILE
 
-peer chaincode install -n energycc -v 1.0 -l node -p /root/CLI/chaincodes/smart_energy_chaincodes/energy_chaincode/src/
+peer chaincode install -n energycccc -v 1.0 -l node -p /root/CLI/chaincodes/smart_energy_chaincodes/energy_chaincode/src/
