@@ -301,7 +301,7 @@ let Chaincode = class {
     console.info('- end transferMarblesBasedOnColor: ' + responsePayload);
   }
 
-  async transfer_money(stub, args, thisClass) {
+  async transferMoney(stub, args, thisClass) {
     //   0       1
     // 'name', 'bob'
     if (args.length < 3) {

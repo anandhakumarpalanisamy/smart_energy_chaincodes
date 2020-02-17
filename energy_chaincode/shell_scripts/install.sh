@@ -8,4 +8,4 @@ export CORE_PEER_ADDRESS=$CORE_PEER_ADDRESS
 export CORE_PEER_MSPCONFIGPATH=$CORE_PEER_MSPCONFIGPATH
 export CORE_PEER_TLS_ROOTCERT_FILE=$CORE_PEER_TLS_ROOTCERT_FILE
 
-peer chaincode install -n carcc -v 1.0 -l node -p /root/CLI/chaincodes/bityoga_fabric_test_chaincodes/carsharing-chaincodes-develop/src/chaincode
+peer chaincode install -n energycc -v 1.0 -l node -p /root/CLI/chaincodes/smart_energy_chaincodes/marble_chaincode/src/
