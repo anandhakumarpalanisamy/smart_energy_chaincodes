@@ -143,8 +143,10 @@ class UserChaincode extends Contract {
     console.log("buyer_asset");
     console.log(buyer_asset);
 
-    let seller_balance = parseInt(seller_asset["Energy_Token"].toString());
-    let buyer_balance = parseInt(buyer_asset["Energy_Token"].toString());
+    let seller_balance = parseInt(
+      seller_asset["Total_Energy_Token"].toString()
+    );
+    let buyer_balance = parseInt(buyer_asset["Total_Energy_Token"].toString());
     let transfer_amount = parseInt(amount);
     let updated_seller_balance = seller_balance - transfer_amount;
     let updated_buyer_balance = buyer_balance + transfer_amount;
