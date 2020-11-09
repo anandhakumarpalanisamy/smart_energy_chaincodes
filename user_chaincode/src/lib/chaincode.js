@@ -57,18 +57,13 @@ class UserChaincode extends Contract {
   }
 
   // UpdateAsset updates an existing asset in the world state with provided parameters.
-  async UpdateAsset(ctx, id, balance, type) {
+  async UpdateAsset(ctx, id, updatedAsset) {
     const exists = await this.AssetExists(ctx, id);
     if (!exists) {
       throw new Error(`The user ${id} does not exist`);
     }
 
     // overwriting original asset with new asset
-    const updatedAsset = {
-      ID: id,
-      Balance: balance,
-      Type: type,
-    };
     return ctx.stub.putState(id, Buffer.from(JSON.stringify(updatedAsset)));
   }
 
@@ -105,30 +100,98 @@ class UserChaincode extends Contract {
   }
 
   // TransferAsset updates the owner field of asset with given id in the world state.
-  async TransferBalance(ctx, from_id, to_id, amount) {
-    const from_asset_string = await this.ReadAsset(ctx, from_id);
-    const to_asset_string = await this.ReadAsset(ctx, to_id);
-    let from_asset = JSON.parse(from_asset_string);
-    let to_asset = JSON.parse(to_asset_string);
-    console.log("from_asset");
-    console.log(from_asset);
-    console.log("to_asset");
-    console.log(to_asset);
-    let from_balance = parseInt(from_asset["Balance"].toString());
-    let to_balance = parseInt(to_asset["Balance"].toString());
+  async TransferBalance(ctx, seller_id, buyer_id, amount) {
+    const seller_asset_string = await this.ReadAsset(ctx, seller_id);
+    const buyer_asset_string = await this.ReadAsset(ctx, buyer_id);
+    let seller_asset = JSON.parse(seller_asset_string);
+    let buyer_asset = JSON.parse(buyer_asset_string);
+    console.log("seller_asset");
+    console.log(seller_asset);
+    console.log("buyer_asset");
+    console.log(buyer_asset);
+    let seller_balance = parseInt(seller_asset["Balance"].toString());
+    let buyer_balance = parseInt(buyer_asset["Balance"].toString());
     let transfer_amount = parseInt(amount);
-    let updated_from_balance = from_balance - transfer_amount;
-    let updated_to_balance = to_balance + transfer_amount;
-    if (updated_from_balance < 0) {
-      throw new Error(`The user ${from_id} does not have sufficient balance`);
+    let updated_seller_balance = seller_balance - transfer_amount;
+    let updated_buyer_balance = buyer_balance + transfer_amount;
+    if (updated_seller_balance < 0) {
+      throw new Error(`The user ${seller_id} does not have sufficient balance`);
     } else {
-      await this.UpdateAsset(ctx, from_id, updated_from_balance, "Sold Energy");
       await this.UpdateAsset(
         ctx,
-        to_id,
-        updated_to_balance,
+        seller_id,
+        updated_seller_balance,
+        "Sold Energy"
+      );
+      await this.UpdateAsset(
+        ctx,
+        buyer_id,
+        updated_buyer_balance,
         "Purchased Energy"
       );
+    }
+  }
+
+  // TransferAsset updates the owner field of asset with given id in the world state.
+  async BuyEnergy(ctx, seller_id, buyer_id, amount, power_to_transact) {
+    const seller_asset_string = await this.ReadAsset(ctx, seller_id);
+    const buyer_asset_string = await this.ReadAsset(ctx, buyer_id);
+    let seller_asset = JSON.parse(seller_asset_string);
+    let buyer_asset = JSON.parse(buyer_asset_string);
+    console.log("seller_asset");
+    console.log(seller_asset);
+    console.log("buyer_asset");
+    console.log(buyer_asset);
+
+    let seller_balance = parseInt(seller_asset["Energy_Token"].toString());
+    let buyer_balance = parseInt(buyer_asset["Energy_Token"].toString());
+    let transfer_amount = parseInt(amount);
+    let updated_seller_balance = seller_balance - transfer_amount;
+    let updated_buyer_balance = buyer_balance + transfer_amount;
+
+    let seller_capacity = parseInt(seller_asset["User_Capacity"].toString());
+    let buyer_capacity = parseInt(buyer_asset["User_Capacity"].toString());
+    let transfer_power = parseInt(power_to_transact);
+    let updated_seller_capacity = seller_capacity - transfer_power;
+    let updated_buyer_capacity = buyer_capacity + transfer_power;
+
+    if (updated_seller_balance < 0) {
+      throw new Error(`The user ${seller_id} does not have sufficient balance`);
+    } else if (updated_seller_capacity < 0) {
+      throw new Error(
+        `The user ${seller_id} does not have sufficient power capacity`
+      );
+    } else {
+      let FromUserJSONAsset = {
+        //ID: user_name+String(smart_meter_id),
+        ID: user_name,
+        User_Name: user_name,
+        User_Capacity: updated_seller_capacity,
+        Total_Energy_Sold:
+          parseInt(seller_asset["Total_Energy_Sold"].toString()) +
+          power_to_transact,
+        Total_Energy_Token: updated_seller_balance,
+        Transaction_From: seller_id,
+        Transaction_Reason: "Energy SOld",
+        Transaction_Invoke_Timestamp: moment().toISOString(),
+      };
+
+      let ToUserJSONAsset = {
+        //ID: user_name+String(smart_meter_id),
+        ID: user_name,
+        User_Name: user_name,
+        User_Capacity: updated_buyer_capacity,
+        Total_Energy_Purchased:
+          parseInt(seller_asset["Total_Energy_Purchased"].toString()) +
+          power_to_transact,
+        Total_Energy_Token: updated_buyer_balance,
+        Transaction_From: buyer_id,
+        Transaction_Reason: "Energy Purchased",
+        Transaction_Invoke_Timestamp: moment().toISOString(),
+      };
+
+      await this.UpdateAsset(ctx, seller_id, FromUserJSONAsset);
+      await this.UpdateAsset(ctx, buyer_id, ToUserJSONAsset);
     }
   }
 
