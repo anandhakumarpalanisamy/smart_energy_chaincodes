@@ -166,22 +166,22 @@ class UserChaincode extends Contract {
     } else {
       let FromUserJSONAsset = {
         //ID: user_name+String(smart_meter_id),
-        ID: user_name,
-        User_Name: user_name,
+        ID: seller_id,
+        //User_Name: user_name,
         User_Capacity: updated_seller_capacity,
         Total_Energy_Sold:
           parseInt(seller_asset["Total_Energy_Sold"].toString()) +
           power_to_transact,
         Total_Energy_Token: updated_seller_balance,
         Transaction_From: seller_id,
-        Transaction_Reason: "Energy SOld",
+        Transaction_Reason: "Energy Sold",
         Transaction_Invoke_Timestamp: moment().toISOString(),
       };
 
       let ToUserJSONAsset = {
         //ID: user_name+String(smart_meter_id),
-        ID: user_name,
-        User_Name: user_name,
+        ID: buyer_id,
+        //User_Name: user_name,
         User_Capacity: updated_buyer_capacity,
         Total_Energy_Purchased:
           parseInt(seller_asset["Total_Energy_Purchased"].toString()) +
