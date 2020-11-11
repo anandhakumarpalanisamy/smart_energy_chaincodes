@@ -165,7 +165,8 @@ class UserChaincode extends Contract {
         `The user ${seller_id} does not have sufficient power capacity`
       );
     } else {
-      let FromUserJSONAsset = {
+      let FromUserJSONAsset = seller_asset;
+      FromUserJSONAsset = {
         //ID: user_name+String(smart_meter_id),
         ID: seller_id,
         //User_Name: user_name,
@@ -179,7 +180,8 @@ class UserChaincode extends Contract {
         Transaction_Invoke_Timestamp: moment().toISOString(),
       };
 
-      let ToUserJSONAsset = {
+      let ToUserJSONAsset = buyer_asset;
+      ToUserJSONAsset = {
         //ID: user_name+String(smart_meter_id),
         ID: buyer_id,
         //User_Name: user_name,
