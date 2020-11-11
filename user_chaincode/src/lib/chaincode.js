@@ -7,6 +7,7 @@
 "use strict";
 
 const { Contract } = require("fabric-contract-api");
+const moment = require("moment");
 
 class UserChaincode extends Contract {
   async InitLedger(ctx) {
