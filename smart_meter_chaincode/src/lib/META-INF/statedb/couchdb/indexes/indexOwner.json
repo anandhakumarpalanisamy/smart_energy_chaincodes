@@ -1,1 +1,1 @@
-{"index":{"fields":["docType","owner"]},"ddoc":"indexOwnerDoc", "name":"indexOwner","type":"json"}
+{"index":{"fields":["docType","Customer"]},"ddoc":"indexOwnerDoc", "name":"indexOwner","type":"json"}
