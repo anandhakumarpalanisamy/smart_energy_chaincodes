@@ -174,7 +174,7 @@ class SmartMeterChaincode extends Contract {
     console.log(JSON.stringify(metadata));
     const results = await this.GetAllResults(iterator, false);
     const final_output = {};
-    final_output["RecordsCount"] = metadata.fetched_records_count;
+    final_output["RecordsCount"] = metadata.fetchedRecordsCount;
     final_output["Bookmark"] = metadata.bookmark;
     final_output["RecordsData"] = results;
     // results.ResponseMetadata = {
