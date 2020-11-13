@@ -173,14 +173,17 @@ class SmartMeterChaincode extends Contract {
     console.log("metadata");
     console.log(JSON.stringify(metadata));
     const results = await this.GetAllResults(iterator, false);
-
-    results.ResponseMetadata = {
-      RecordsCount: metadata.fetched_records_count,
-      Bookmark: metadata.bookmark,
-    };
-    console.log("results");
-    console.log(JSON.stringify(results));
-    return JSON.stringify(results);
+    const final_output = {};
+    final_output["RecordsCount"] = metadata.fetched_records_count;
+    final_output["Bookmark"] = metadata.bookmark;
+    final_output["RecordsData"] = results;
+    // results.ResponseMetadata = {
+    //   RecordsCount: metadata.fetched_records_count,
+    //   Bookmark: metadata.bookmark,
+    // };
+    console.log("final_output");
+    console.log(JSON.stringify(final_output));
+    return JSON.stringify(final_output);
   }
   // GetAssetHistory returns the chain of custody for an asset since issuance.
   async GetAssetHistory(ctx, assetName) {
