@@ -94,7 +94,7 @@ class SmartMeterChaincode extends Contract {
     }
     return assetJSON;
   }
-// GetQueryResultForQueryString executes the passed in query string.
+  // GetQueryResultForQueryString executes the passed in query string.
   // Result set is built and returned as a byte array containing the JSON results.
   async GetQueryResultForQueryString(ctx, queryString) {
     let resultsIterator = await ctx.stub.getQueryResult(queryString);
@@ -168,13 +168,18 @@ class SmartMeterChaincode extends Contract {
       pageSize,
       bookmark
     );
+    console.log("iterator");
+    console.log(iterator);
+    console.log("metadata");
+    console.log(JSON.stringify(metadata));
     const results = await this.GetAllResults(iterator, false);
 
     results.ResponseMetadata = {
       RecordsCount: metadata.fetched_records_count,
       Bookmark: metadata.bookmark,
     };
-
+    console.log("results");
+    console.log(JSON.stringify(results));
     return JSON.stringify(results);
   }
   // GetAssetHistory returns the chain of custody for an asset since issuance.
