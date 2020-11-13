@@ -133,6 +133,90 @@ class UserChaincode extends Contract {
     }
   }
 
+  // GetQueryResultForQueryString executes the passed in query string.
+  // Result set is built and returned as a byte array containing the JSON results.
+  async GetQueryResultForQueryString(ctx, queryString) {
+    let resultsIterator = await ctx.stub.getQueryResult(queryString);
+    let results = await this.GetAllResults(resultsIterator, false);
+
+    return JSON.stringify(results);
+  }
+
+  // Example: Ad hoc rich query
+  // QueryAssets uses a query string to perform a query for assets.
+  // Query string matching state database syntax is passed in and executed as is.
+  // Supports ad hoc queries that can be defined at runtime by the client.
+  // If this is not desired, follow the QueryAssetsForOwner example for parameterized queries.
+  // Only available on state databases that support rich query (e.g. CouchDB)
+  async QueryAssets(ctx, queryString) {
+    return await this.GetQueryResultForQueryString(ctx, queryString);
+  }
+
+  // QueryAssetsByOwner queries for assets based on a passed in owner.
+  // This is an example of a parameterized query where the query logic is baked into the chaincode,
+  // and accepting a single query parameter (owner).
+  // Only available on state databases that support rich query (e.g. CouchDB)
+  // Example: Parameterized rich query
+  async QueryAssetsByOwner(ctx, owner) {
+    let queryString = {};
+    queryString.selector = {};
+    queryString.selector.docType = "asset";
+    queryString.selector.owner = owner;
+    return await this.GetQueryResultForQueryString(
+      ctx,
+      JSON.stringify(queryString)
+    ); //shim.success(queryResults);
+  }
+  // Example: Pagination with Range Query
+  // GetAssetsByRangeWithPagination performs a range query based on the start & end key,
+  // page size and a bookmark.
+  // The number of fetched records will be equal to or lesser than the page size.
+  // Paginated range queries are only valid for read only transactions.
+  async GetAssetsByRangeWithPagination(
+    ctx,
+    startKey,
+    endKey,
+    pageSize,
+    bookmark
+  ) {
+    const { iterator, metadata } = await ctx.stub.getStateByRangeWithPagination(
+      startKey,
+      endKey,
+      pageSize,
+      bookmark
+    );
+    const results = await this.GetAllResults(iterator, false);
+
+    results.ResponseMetadata = {
+      RecordsCount: metadata.fetched_records_count,
+      Bookmark: metadata.bookmark,
+    };
+    return JSON.stringify(results);
+  }
+  // Example: Pagination with Ad hoc Rich Query
+  // QueryAssetsWithPagination uses a query string, page size and a bookmark to perform a query
+  // for assets. Query string matching state database syntax is passed in and executed as is.
+  // The number of fetched records would be equal to or lesser than the specified page size.
+  // Supports ad hoc queries that can be defined at runtime by the client.
+  // If this is not desired, follow the QueryAssetsForOwner example for parameterized queries.
+  // Only available on state databases that support rich query (e.g. CouchDB)
+  // Paginated queries are only valid for read only transactions.
+  async QueryAssetsWithPagination(ctx, queryString, pageSize, bookmark) {
+    const { iterator, metadata } = await ctx.stub.getQueryResultWithPagination(
+      queryString,
+      pageSize,
+      bookmark
+    );
+    const results = await this.GetAllResults(iterator, false);
+
+    results.ResponseMetadata = {
+      RecordsCount: metadata.fetched_records_count,
+      Bookmark: metadata.bookmark,
+    };
+
+    return JSON.stringify(results);
+  }
+
   // TransferAsset updates the owner field of asset with given id in the world state.
   async BuyEnergy(ctx, seller_id, buyer_id, amount, power_to_transact) {
     const seller_asset_string = await this.ReadAsset(ctx, seller_id);
