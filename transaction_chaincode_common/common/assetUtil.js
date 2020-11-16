@@ -10,28 +10,28 @@ let SUCCESS_CODE = 200;
 let FAILURE_CODE = 500;
 
 export async function InitLedger(ctx) {
-  let returnValue = {};
-  returnValue["status"] = SUCCESS_CODE;
+  let return_value = {};
+  return_value["status"] = SUCCESS_CODE;
   try {
     const assets = [];
     for (const asset of assets) {
       asset.docType = "asset";
       await ctx.stub.putState(asset.ID, Buffer.from(JSON.stringify(asset)));
       console.info(`Asset ${asset.ID} initialized`);
-      returnValue["message"] = `Asset ${asset.ID} initialized successfully`;
+      return_value["message"] = `Asset ${asset.ID} initialized successfully`;
     }
   } catch (error) {
-    returnValue["status"] = FAILURE_CODE;
-    returnValue["message"] = `Failed to evaluate transaction: ${error}`;
+    return_value["status"] = FAILURE_CODE;
+    return_value["message"] = `Failed to evaluate transaction: ${error}`;
   } finally {
-    return returnValue;
+    return return_value;
   }
 }
 
 // CreateAsset issues a new asset to the world state with given details.
 export async function CreateAssetJson(ctx, assetJSON) {
-  let returnValue = {};
-  returnValue["status"] = SUCCESS_CODE;
+  let return_value = {};
+  return_value["status"] = SUCCESS_CODE;
 
   try {
     // Parse json object
@@ -42,61 +42,61 @@ export async function CreateAssetJson(ctx, assetJSON) {
         await ctx.stub.putState(asset.ID, Buffer.from(JSON.stringify(asset)));
         console.info(`Asset ${asset.ID} initialized`);
       }
-      returnValue["message"] = `${assets.length} Assets created successfully`;
-      console.info(returnValue["message"]);
+      return_value["message"] = `${assets.length} Assets created successfully`;
+      console.info(return_value["message"]);
     } else {
       await ctx.stub.putState(assets.ID, Buffer.from(JSON.stringify(assets)));
-      returnValue["message"] = `Asset ${assets.ID} created successfully`;
-      console.info(returnValue["message"]);
+      return_value["message"] = `Asset ${assets.ID} created successfully`;
+      console.info(return_value["message"]);
     }
   } catch (error) {
-    returnValue["status"] = FAILURE_CODE;
-    returnValue["message"] = `Failed to create Asset: ${error}`;
+    return_value["status"] = FAILURE_CODE;
+    return_value["message"] = `Failed to create Asset: ${error}`;
   } finally {
-    return returnValue;
+    return return_value;
   }
 }
 // DeleteAsset deletes an given asset from the world state.
 export async function DeleteAsset(ctx, id) {
-  let returnValue = {};
-  returnValue["status"] = SUCCESS_CODE;
+  let return_value = {};
+  return_value["status"] = SUCCESS_CODE;
 
   try {
     const exists = await this.AssetExists(ctx, id);
     if (!exists) {
-      returnValue["status"] = FAILURE_CODE;
-      returnValue["message"] = `The asset ${id} does not exist`;
+      return_value["status"] = FAILURE_CODE;
+      return_value["message"] = `The asset ${id} does not exist`;
     } else {
-      returnValue["message"] = ctx.stub.deleteState(id);
+      return_value["message"] = ctx.stub.deleteState(id);
     }
   } catch (error) {
-    returnValue["status"] = FAILURE_CODE;
-    returnValue["message"] = `Failed to Delete Asset: ${error}`;
+    return_value["status"] = FAILURE_CODE;
+    return_value["message"] = `Failed to Delete Asset: ${error}`;
   } finally {
-    return returnValue;
+    return return_value;
   }
 }
 // UpdateAsset updates an existing asset in the world state with provided parameters.
 export async function UpdateAssetJson(ctx, id, updateParamsJSON) {
-  let returnValue = {};
-  returnValue["status"] = SUCCESS_CODE;
+  let return_value = {};
+  return_value["status"] = SUCCESS_CODE;
 
   try {
     const exists = await this.AssetExists(ctx, id);
     if (!exists) {
-      returnValue["status"] = FAILURE_CODE;
-      returnValue["message"] = `The asset ${id} does not exist`;
+      return_value["status"] = FAILURE_CODE;
+      return_value["message"] = `The asset ${id} does not exist`;
     } else {
-      returnValue["message"] = ctx.stub.putState(
+      return_value["message"] = ctx.stub.putState(
         id,
         Buffer.from(JSON.stringify(updateParamsJSON))
       );
     }
   } catch (error) {
-    returnValue["status"] = FAILURE_CODE;
-    returnValue["message"] = `Failed to Update Asset: ${error}`;
+    return_value["status"] = FAILURE_CODE;
+    return_value["message"] = `Failed to Update Asset: ${error}`;
   } finally {
-    return returnValue;
+    return return_value;
   }
 }
 

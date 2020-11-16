@@ -1,9 +1,9 @@
 #!/bin/bash
 set -x #echo on
 
-CHAINCODE_NAME="smart-meter"
+CHAINCODE_NAME="energy-transaction"
 CHAINCODE_VERSION="1.0"
-CHAINCODE_SRC_CODE_PATH="/root/CLI/chaincodes/smart_energy_chaincodes/smart_meter_chaincode/src"
+CHAINCODE_SRC_CODE_PATH="/root/CLI/chaincodes/smart_energy_chaincodes/transaction_chaincode_common/src"
 
 export PEER_HOST=peer2
 export CORE_PEER_ADDRESS=${PEER_HOST}:7051

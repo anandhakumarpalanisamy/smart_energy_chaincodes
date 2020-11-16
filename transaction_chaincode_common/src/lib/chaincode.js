@@ -7,7 +7,7 @@
 "use strict";
 
 const { Contract } = require("fabric-contract-api");
-const { AssetUtil } = require("../../../common/assetUtil");
+const { AssetUtil } = require("common/assetUtil");
 
 class TransactionChaincodeCommon extends Contract {
   async InitLedger(ctx) {
