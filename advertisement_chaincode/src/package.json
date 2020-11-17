@@ -1,7 +1,7 @@
 {
-	"name": "smart-energy-chaincode",
+	"name": "advertisement-chaincode",
 	"version": "1.0.0",
-	"description": "smart energy chaincode implemented in node.js",
+	"description": "advertisement chaincode implemented in node.js",
 	"main": "index.js",
 	"engines": {
 		"node": ">=12",
