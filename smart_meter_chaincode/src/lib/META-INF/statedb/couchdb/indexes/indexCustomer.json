@@ -1,8 +1,0 @@
-{
-    "index":{
-        "fields":["docType","Customer","Unix_Time_Stamp"]
-    },
-    "ddoc":"indexCustomerDoc",
-    "name":"indexCustomer",
-    "type":"json"
-}
