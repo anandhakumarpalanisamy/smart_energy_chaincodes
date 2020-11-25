@@ -7,8 +7,8 @@
 "use strict";
 
 const { Contract } = require("fabric-contract-api");
-const { AssetUtil } = require("./AssetUtil");
-
+const { AssetUtilFunctions } = require("./AssetUtil");
+let AssetUtil = new AssetUtilFunctions();
 class TestAssetUtilChaincode extends Contract {
   async InitLedger(ctx) {
     console.log("InitLedger");
