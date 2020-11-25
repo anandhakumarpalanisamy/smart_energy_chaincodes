@@ -23,7 +23,7 @@ function update_obj(obj /*, …*/) {
   return obj;
 }
 
-export async function InitLedger(ctx) {
+async function InitLedger(ctx) {
   let returnValue = {};
   returnValue["status"] = SUCCESS_CODE;
   try {
@@ -44,7 +44,7 @@ export async function InitLedger(ctx) {
 }
 
 // CreateAsset issues a new asset to the world state with given details.
-export async function CreateAssetJson(ctx, assetJSON) {
+async function CreateAssetJson(ctx, assetJSON) {
   let returnValue = {};
   returnValue["status"] = SUCCESS_CODE;
 
@@ -73,7 +73,7 @@ export async function CreateAssetJson(ctx, assetJSON) {
   }
 }
 // DeleteAsset deletes an given asset from the world state.
-export async function DeleteAsset(ctx, id) {
+async function DeleteAsset(ctx, id) {
   let returnValue = {};
   returnValue["status"] = SUCCESS_CODE;
 
@@ -93,7 +93,7 @@ export async function DeleteAsset(ctx, id) {
   }
 }
 // UpdateAsset updates an existing asset in the world state with provided parameters.
-export async function UpdateAssetJson(ctx, id, updateParamsJSON) {
+async function UpdateAssetJson(ctx, id, updateParamsJSON) {
   let returnValue = {};
   returnValue["status"] = SUCCESS_CODE;
 
@@ -121,13 +121,13 @@ export async function UpdateAssetJson(ctx, id, updateParamsJSON) {
 }
 
 // AssetExists returns true when asset with given ID exists in world state.
-export async function AssetExists(ctx, id) {
+async function AssetExists(ctx, id) {
   const assetJSON = await ctx.stub.getState(id);
   return assetJSON && assetJSON.length > 0;
 }
 
 // GetAsset returns the asset stored in the world state with given id.
-export async function GetAsset(ctx, id) {
+async function GetAsset(ctx, id) {
   const assetJSON = await ctx.stub.getState(id); // get the asset from chaincode state
   if (!assetJSON || assetJSON.length === 0) {
     throw new Error(`The asset ${id} does not exist`);
@@ -136,7 +136,7 @@ export async function GetAsset(ctx, id) {
 }
 // GetQueryResultForQueryString executes the passed in query string.
 // Result set is built and returned as a byte array containing the JSON results.
-export async function GetQueryResultForQueryString(ctx, queryString) {
+async function GetQueryResultForQueryString(ctx, queryString) {
   let resultsIterator = await ctx.stub.getQueryResult(queryString);
   let results = await this.GetAllResults(resultsIterator, false);
 
@@ -149,7 +149,7 @@ export async function GetQueryResultForQueryString(ctx, queryString) {
 // Supports ad hoc queries that can be defined at runtime by the client.
 // If this is not desired, follow the QueryAssetsForOwner example for parameterized queries.
 // Only available on state databases that support rich query (e.g. CouchDB)
-export async function QueryAssets(ctx, queryString) {
+async function QueryAssets(ctx, queryString) {
   return await this.GetQueryResultForQueryString(ctx, queryString);
 }
 
@@ -158,7 +158,7 @@ export async function QueryAssets(ctx, queryString) {
 // page size and a bookmark.
 // The number of fetched records will be equal to or lesser than the page size.
 // Paginated range queries are only valid for read only transactions.
-export async function GetAssetsByRangeWithPagination(
+async function GetAssetsByRangeWithPagination(
   ctx,
   startKey,
   endKey,
@@ -192,12 +192,7 @@ export async function GetAssetsByRangeWithPagination(
 // If this is not desired, follow the QueryAssetsForOwner example for parameterized queries.
 // Only available on state databases that support rich query (e.g. CouchDB)
 // Paginated queries are only valid for read only transactions.
-export async function QueryAssetsWithPagination(
-  ctx,
-  queryString,
-  pageSize,
-  bookmark
-) {
+async function QueryAssetsWithPagination(ctx, queryString, pageSize, bookmark) {
   const { iterator, metadata } = await ctx.stub.getQueryResultWithPagination(
     queryString,
     pageSize,
@@ -217,7 +212,7 @@ export async function QueryAssetsWithPagination(
   return JSON.stringify(final_output);
 }
 // GetAssetHistory returns the chain of custody for an asset since issuance.
-export async function GetAssetHistory(ctx, assetId) {
+async function GetAssetHistory(ctx, assetId) {
   let resultsIterator = await ctx.stub.getHistoryForKey(assetId);
   let results = await this.GetAllResults(resultsIterator, true);
 
@@ -225,7 +220,7 @@ export async function GetAssetHistory(ctx, assetId) {
 }
 
 // GetAllAssets returns all assets found in the world state.
-export async function GetAllAssets(ctx) {
+async function GetAllAssets(ctx) {
   const allResults = [];
   // range query with empty string for startKey and endKey does an open-ended query of all assets in the chaincode namespace.
   const iterator = await ctx.stub.getStateByRange("", "");
@@ -247,7 +242,7 @@ export async function GetAllAssets(ctx) {
   return JSON.stringify(allResults);
 }
 
-export async function GetAllResults(iterator, isHistory) {
+async function GetAllResults(iterator, isHistory) {
   let allResults = [];
   let res = await iterator.next();
   while (!res.done) {
@@ -279,3 +274,16 @@ export async function GetAllResults(iterator, isHistory) {
   iterator.close();
   return allResults;
 }
+module.exports = InitLedger;
+module.exports = CreateAssetJson;
+module.exports = DeleteAsset;
+module.exports = UpdateAssetJson;
+module.exports = AssetExists;
+module.exports = GetAsset;
+module.exports = GetQueryResultForQueryString;
+module.exports = QueryAssets;
+module.exports = GetAssetsByRangeWithPagination;
+module.exports = QueryAssetsWithPagination;
+module.exports = GetAssetHistory;
+module.exports = GetAllAssets;
+module.exports = GetAllResults;
