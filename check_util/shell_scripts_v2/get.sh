@@ -1,7 +1,7 @@
 #!/bin/bash
 set -x #echo on
 
-CHAINCODE_NAME="smart-meter"
+CHAINCODE_NAME="asset-util"
 CHANNEL_NAME="appchannel"
 QUERY_PARAMS='{"Args":["GetAllAssets"]}'
 

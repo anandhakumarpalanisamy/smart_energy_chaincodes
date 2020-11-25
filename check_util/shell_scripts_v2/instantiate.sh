@@ -1,7 +1,7 @@
 #!/bin/bash
 set -x #echo on
 
-CHAINCODE_NAME="smart-meter"
+CHAINCODE_NAME="asset-util"
 CHAINCODE_VERSION="1.0"
 INSTANTIATE_PARAMS='{"Args":["InitLedger"]}'
 CHANNEL_NAME="appchannel"
