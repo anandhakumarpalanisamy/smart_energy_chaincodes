@@ -25,6 +25,8 @@ function update_obj(obj /*, …*/) {
 
 async function InitLedger(ctx) {
   let returnValue = {};
+  console.log("inside lib initledger");
+  console.log(ctx);
   returnValue["status"] = SUCCESS_CODE;
   try {
     const assets = [];

@@ -11,6 +11,8 @@ const { AssetUtil } = require("./AssetUtil");
 
 class TestAssetUtilChaincode extends Contract {
   async InitLedger(ctx) {
+    console.log("InitLedger");
+    console.log(ctx);
     return AssetUtil.InitLedger(ctx);
   }
 
