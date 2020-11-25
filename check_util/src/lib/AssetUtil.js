@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-"use strict";
 const moment = require("moment");
 
 let SUCCESS_CODE = 200;
