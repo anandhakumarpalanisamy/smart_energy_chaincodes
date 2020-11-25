@@ -276,16 +276,18 @@ async function GetAllResults(iterator, isHistory) {
   iterator.close();
   return allResults;
 }
-module.exports = InitLedger;
-module.exports = CreateAssetJson;
-module.exports = DeleteAsset;
-module.exports = UpdateAssetJson;
-module.exports = AssetExists;
-module.exports = GetAsset;
-module.exports = GetQueryResultForQueryString;
-module.exports = QueryAssets;
-module.exports = GetAssetsByRangeWithPagination;
-module.exports = QueryAssetsWithPagination;
-module.exports = GetAssetHistory;
-module.exports = GetAllAssets;
-module.exports = GetAllResults;
+module.exports = {
+  InitLedger,
+  CreateAssetJson,
+  DeleteAsset,
+  UpdateAssetJson,
+  AssetExists,
+  GetAsset,
+  GetQueryResultForQueryString,
+  QueryAssets,
+  GetAssetsByRangeWithPagination,
+  QueryAssetsWithPagination,
+  GetAssetHistory,
+  GetAllAssets,
+  GetAllResults,
+};
