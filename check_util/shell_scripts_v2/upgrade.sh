@@ -5,7 +5,7 @@ CHAINCODE_NAME="asset-util"
 CHAINCODE_VERSION="1.2"
 INSTANTIATE_PARAMS='{"Args":["InitLedger"]}'
 CHANNEL_NAME="appchannel"
-CHAINCODE_SRC_CODE_PATH="/root/CLI/chaincodes/smart_energy_chaincodes/smart_meter_chaincode/src"
+CHAINCODE_SRC_CODE_PATH="/root/CLI/chaincodes/smart_energy_chaincodes/check_util/src"
 
 export PEER_HOST=peer2
 export CORE_PEER_ADDRESS=${PEER_HOST}:7051
