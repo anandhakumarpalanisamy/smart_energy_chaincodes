@@ -1,8 +1,0 @@
-{
-    "index":{
-        "fields":["Customer","Unix_Time_Stamp"]
-    },
-    "ddoc":"indexTestAssetUtilChaincodeDoc",
-    "name":"indexTestAssetUtilChaincode",
-    "type":"json"
-}
