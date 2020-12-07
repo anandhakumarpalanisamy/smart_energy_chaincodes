@@ -1,0 +1,8 @@
+{
+    "index":{
+        "fields":["TransactionUnixTimestamp"]
+    },
+    "ddoc":"indexAdvertisementChaincodeDoc",
+    "name":"indexAdvertisementChaincode",
+    "type":"json"
+}
