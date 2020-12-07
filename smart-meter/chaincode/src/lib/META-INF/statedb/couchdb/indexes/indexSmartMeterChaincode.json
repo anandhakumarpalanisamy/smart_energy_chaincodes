@@ -1,6 +1,6 @@
 {
     "index":{
-        "fields":["TransactionUnixTimestamp"]
+        "fields":["Customer","Unix_Time_Stamp","TransactionUnixTimestamp"]
     },
     "ddoc":"indexSmartMeterChaincodeDoc",
     "name":"indexSmartMeterChaincode",
