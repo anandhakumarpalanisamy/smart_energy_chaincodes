@@ -6,6 +6,9 @@
 
 const { Contract } = require("fabric-contract-api");
 const AssetUtil = require("./AssetUtil");
+let SUCCESS_CODE = 200;
+let FAILURE_CODE = 500;
+
 class TransactionChaincode extends Contract {
   async InitLedger(ctx) {
     let initialAsset = [];
@@ -106,20 +109,37 @@ class TransactionChaincode extends Contract {
 
   // GetAllAssets returns all assets found in the world state.
   async BuyEnergy(ctx, buyEnergyJsonParams) {
-    // Parse json object
-    const buyEnergyJson = JSON.parse(buyEnergyJsonParams);
-    console.log("Buy Energy Json Params");
-    console.log(buyEnergyJson);
-    let queryArgs = ["GetAsset", buyEnergyJson.Advertisement_Id];
-    const advertisement_asset = await ctx.stub.invokeChaincode(
-      "advertisement",
-      queryArgs,
-      "appchannel"
-    );
-    console.log("advertisement_asset");
-    console.log(advertisement_asset);
+    let returnValue = {};
+    returnValue["status"] = SUCCESS_CODE;
+    try {
+      // Parse json object
+      const buyEnergyJson = JSON.parse(buyEnergyJsonParams);
+      console.log("Buy Energy Json Params");
+      console.log(buyEnergyJson);
+      let queryArgs = ["GetAsset", buyEnergyJson.Advertisement_Id];
+      const advertisement_asset = await ctx.stub.invokeChaincode(
+        "advertisement",
+        queryArgs,
+        "appchannel"
+      );
 
-    return JSON.stringify(advertisement_asset);
+      if (advertisement_asset.status == 200) {
+        let advertisement_data = JSON.parse(
+          advertisement_asset.payload.toString("utf8")
+        );
+        console.log("advertisement_data");
+        console.log(advertisement_data);
+        returnValue["data"] = advertisement_data;
+      } else {
+        returnValue["status"] = FAILURE_CODE;
+        returnValue["message"] = `Failed to get advertisement asset`;
+      }
+    } catch (error) {
+      returnValue["status"] = FAILURE_CODE;
+      returnValue["message"] = `Failed to create Asset: ${error}`;
+    } finally {
+      return returnValue;
+    }
   }
 }
 
