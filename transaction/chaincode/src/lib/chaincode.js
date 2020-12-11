@@ -110,7 +110,7 @@ class TransactionChaincode extends Contract {
     const assets = JSON.parse(assetJSON);
     //stub.InvokeChaincode(chaincodeName, queryArgs, channelName)
     let queryArgs = ["GetAsset", assets.Advertisement_Id];
-    const advertisement_asset = ctx.stub.InvokeChaincode(
+    const advertisement_asset = ctx.stub.invokeChaincode(
       "advertisement",
       queryArgs,
       "appchannel"
