@@ -105,12 +105,13 @@ class TransactionChaincode extends Contract {
   }
 
   // GetAllAssets returns all assets found in the world state.
-  async BuyEnergy(ctx, assetJSON) {
+  async BuyEnergy(ctx, buyEnergyJsonParams) {
     // Parse json object
-    const assets = JSON.parse(assetJSON);
-    //stub.InvokeChaincode(chaincodeName, queryArgs, channelName)
-    let queryArgs = ["GetAsset", assets.Advertisement_Id];
-    const advertisement_asset = ctx.stub.invokeChaincode(
+    const buyEnergyJson = JSON.parse(buyEnergyJsonParams);
+    console.log("Buy Energy Json Params");
+    console.log(buyEnergyJson);
+    let queryArgs = ["GetAsset", buyEnergyJson.Advertisement_Id];
+    const advertisement_asset = await ctx.stub.invokeChaincode(
       "advertisement",
       queryArgs,
       "appchannel"
