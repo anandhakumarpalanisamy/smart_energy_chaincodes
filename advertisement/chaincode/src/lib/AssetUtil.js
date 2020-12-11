@@ -103,7 +103,7 @@ async function GetAsset(ctx, id) {
   if (!assetJSON || assetJSON.length === 0) {
     throw new Error(`The asset ${id} does not exist`);
   }
-  return assetJSON;
+  return assetJSON.toString();
 }
 // GetQueryResultForQueryString executes the passed in query string.
 // Result set is built and returned as a byte array containing the JSON results.
