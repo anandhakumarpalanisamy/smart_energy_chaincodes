@@ -124,12 +124,10 @@ class TransactionChaincode extends Contract {
       );
 
       if (advertisement_asset.status == 200) {
-        let advertisement_data_buffer = JSON.parse(
-          advertisement_asset.payload.toString("utf8")
-        );
-        let advertisement_data = JSON.parse(
-          advertisement_data_buffer.data.toString("utf8")
-        );
+        // let advertisement_data_buffer = JSON.parse(
+        //   advertisement_asset.payload.toString("utf8")
+        // );
+        let advertisement_data = JSON.parse(advertisement_asset.toString());
         console.log("advertisement_data");
         console.log(advertisement_data);
         returnValue["data"] = advertisement_data;
@@ -139,7 +137,7 @@ class TransactionChaincode extends Contract {
       }
     } catch (error) {
       returnValue["status"] = FAILURE_CODE;
-      returnValue["message"] = `Failed to create Asset: ${error}`;
+      returnValue["message"] = `BuyEnergy Failed: ${error}`;
     } finally {
       return returnValue;
     }
