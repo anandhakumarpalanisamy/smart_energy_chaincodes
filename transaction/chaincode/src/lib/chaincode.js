@@ -103,6 +103,23 @@ class TransactionChaincode extends Contract {
   async GetAllAssets(ctx) {
     return AssetUtil.GetAllAssets(ctx);
   }
+
+  // GetAllAssets returns all assets found in the world state.
+  async BuyEnergy(ctx, assetJSON) {
+    // Parse json object
+    const assets = JSON.parse(assetJSON);
+    //stub.InvokeChaincode(chaincodeName, queryArgs, channelName)
+    let queryArgs = ["GetAsset", assets.Advertisement_Id];
+    const advertisement_asset = ctx.stub.InvokeChaincode(
+      "advertisement",
+      queryArgs,
+      "appchannel"
+    );
+    console.log("advertisement_asset");
+    console.log(advertisement_asset);
+
+    return JSON.stringify(advertisement_asset);
+  }
 }
 
 module.exports = TransactionChaincode;
