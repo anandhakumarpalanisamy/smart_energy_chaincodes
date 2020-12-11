@@ -122,12 +122,10 @@ class TransactionChaincode extends Contract {
         queryArgs,
         "appchannel"
       );
-
+      console.log("advertisement_asset");
+      console.log(advertisement_asset);
       if (advertisement_asset.status == 200) {
-        // let advertisement_data_buffer = JSON.parse(
-        //   advertisement_asset.payload.toString("utf8")
-        // );
-        let advertisement_data = JSON.parse(advertisement_asset.toString());
+        let advertisement_data = advertisement_asset.payload.toString("utf8");
         console.log("advertisement_data");
         console.log(advertisement_data);
         returnValue["data"] = advertisement_data;
