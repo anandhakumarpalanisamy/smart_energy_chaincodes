@@ -125,7 +125,7 @@ class TransactionChaincode extends Contract {
 
       if (advertisement_asset.status == 200) {
         let advertisement_data = JSON.parse(
-          advertisement_asset.payload.toString("utf8")
+          advertisement_asset.payload.toString()
         );
         console.log("advertisement_data");
         console.log(advertisement_data);
