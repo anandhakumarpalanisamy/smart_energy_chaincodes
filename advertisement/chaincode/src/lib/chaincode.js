@@ -146,7 +146,7 @@ class AdvertisementChaincode extends Contract {
       console.log("After increamenting energy advertised");
 
       console.log(userData);
-      let updateUserAssetArgs = ["UpdateAssetJson", JSON.stringify(userData)];
+      let updateUserAssetArgs = ["UpdateAsset", JSON.stringify(userData)];
       console.log("calling to update user asset");
       console.log("updateUserAssetArgs");
       console.log(updateUserAssetArgs);
