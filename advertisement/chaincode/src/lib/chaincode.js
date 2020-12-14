@@ -129,7 +129,7 @@ class AdvertisementChaincode extends Contract {
     );
 
     if (getUserAsset["status"] == 200) {
-      let userData = getUserAsset["payload"].toString("utf8");
+      let userData = JSON.parse(getUserAsset["payload"].toString("utf8"));
       console.log("userData");
       console.log(userData);
 
