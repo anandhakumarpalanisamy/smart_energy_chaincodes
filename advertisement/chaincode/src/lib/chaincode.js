@@ -6,6 +6,10 @@
 
 const { Contract } = require("fabric-contract-api");
 const AssetUtil = require("./AssetUtil");
+
+let SUCCESS_CODE = 200;
+let FAILURE_CODE = 500;
+
 class AdvertisementChaincode extends Contract {
   async InitLedger(ctx) {
     let initialAsset = [];
@@ -102,6 +106,75 @@ class AdvertisementChaincode extends Contract {
   // GetAllAssets returns all assets found in the world state.
   async GetAllAssets(ctx) {
     return AssetUtil.GetAllAssets(ctx);
+  }
+
+  async createAdvertisement (ctx,assetJSON) {
+
+    let returnValue = {};
+    returnValue["status"] = SUCCESS_CODE;
+    try {
+
+
+
+    // Parse json object
+    const advertisementAssetJson = JSON.parse(assetJSON);
+
+
+    // Get User Asset from User Chaincode
+    let getUserAssetArgs = ["GetAsset", advertisementAssetJson.User_Id];
+    const getUserAsset = await ctx.stub.invokeChaincode(
+      "user",
+      getUserAssetArgs,
+      "appchannel"
+    );
+
+    if (getUserAsset["status"] == 200) {
+      let userData = getUserAsset["payload"].toString("utf8");
+      console.log("userData");
+      console.log(userData);
+
+      // Create advertisement asset
+      let createAdvertisementAssetStatus =  this.CreateAssetJson(ctx, assetJSON);
+      console.log("createAdvertisementAssetStatus");
+      console.log(createAdvertisementAssetStatus);
+
+
+      // Update "Energy_Advertised" field in User Chaincode
+      userData["Energy_Advertised"] = userData["Energy_Advertised"] + advertisementAssetJson["Energy_to_Sell"]
+
+      let updateUserAssetArgs = ["UpdateAssetJson", JSON.stringify(userData)];
+      const updateUserAsset = await ctx.stub.invokeChaincode(
+        "user",
+        updateUserAssetArgs,
+        "appchannel"
+      );
+
+      if (updateUserAsset["status"] == 200) {
+        let updateUserAssetStatusData = updateUserAsset["payload"].toString("utf8");
+        console.log("updateUserAssetStatusData");
+        console.log(updateUserAssetStatusData);
+      } else {
+        returnValue["status"] = FAILURE_CODE;
+        returnValue["message"] = `Advertisement Chaincode - Failed to get update "Energy_Advertised" in user asset`;
+      }
+
+
+
+    } else {
+      returnValue["status"] = FAILURE_CODE;
+      returnValue["message"] = `Advertisement Chaincode - Failed to get User Asset`;
+    }
+
+
+    
+  } catch (error) {
+    returnValue["status"] = FAILURE_CODE;
+    returnValue["message"] = `Advertisement Chaincode - createAdvertisement Failed: ${error}`;
+  } finally {
+    return returnValue;
+  }
+
+
   }
 }
 
