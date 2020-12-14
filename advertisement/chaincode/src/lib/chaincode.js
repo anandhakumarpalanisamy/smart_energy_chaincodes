@@ -134,7 +134,7 @@ class AdvertisementChaincode extends Contract {
       console.log(userData);
 
       // Create advertisement asset
-      let createAdvertisementAssetStatus =  this.CreateAssetJson(ctx, assetJSON);
+      let createAdvertisementAssetStatus =  await this.CreateAssetJson(ctx, assetJSON);
       console.log("createAdvertisementAssetStatus");
       console.log(createAdvertisementAssetStatus);
 
