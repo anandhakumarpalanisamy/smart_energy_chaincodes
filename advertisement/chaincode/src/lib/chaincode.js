@@ -121,7 +121,7 @@ class AdvertisementChaincode extends Contract {
 
 
     // Get User Asset from User Chaincode
-    let getUserAssetArgs = ["GetAsset", advertisementAssetJson.User_Id];
+    let getUserAssetArgs = ["GetAsset", advertisementAssetJson["User_Id"]];
     const getUserAsset = await ctx.stub.invokeChaincode(
       "user",
       getUserAssetArgs,
@@ -146,7 +146,7 @@ class AdvertisementChaincode extends Contract {
       console.log("After increamenting energy advertised");
 
       console.log(userData);
-      let updateUserAssetArgs = ["UpdateAssetJson", JSON.stringify(userData)];
+      let updateUserAssetArgs = ["UpdateAssetJson", advertisementAssetJson["User_Id"] ,JSON.stringify(userData)];
       console.log("calling to update user asset");
       console.log("updateUserAssetArgs");
       console.log(updateUserAssetArgs);

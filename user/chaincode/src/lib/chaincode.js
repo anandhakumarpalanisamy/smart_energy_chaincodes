@@ -23,8 +23,8 @@ class UserChaincode extends Contract {
   }
 
   // UpdateAsset updates an existing asset in the world state with provided parameters.
-  async UpdateAssetJson(ctx, updateParamsJSON) {
-    return AssetUtil.UpdateAssetJson(ctx, updateParamsJSON);
+  async UpdateAssetJson(ctx, assetId, updateParamsJSON) {
+    return AssetUtil.UpdateAssetJson(ctx,assetId, updateParamsJSON);
   }
 
   // DeleteAsset deletes an given asset from the world state.
