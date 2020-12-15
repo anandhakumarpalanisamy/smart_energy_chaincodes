@@ -108,80 +108,87 @@ class AdvertisementChaincode extends Contract {
     return AssetUtil.GetAllAssets(ctx);
   }
 
-  async createAdvertisement (ctx,assetJSON) {
-
+  async createAdvertisement(ctx, assetJSON) {
     let returnValue = {};
     returnValue["status"] = SUCCESS_CODE;
     try {
+      // Parse json object
+      const advertisementAssetJson = JSON.parse(assetJSON);
 
-
-
-    // Parse json object
-    const advertisementAssetJson = JSON.parse(assetJSON);
-
-
-    // Get User Asset from User Chaincode
-    let getUserAssetArgs = ["GetAsset", advertisementAssetJson["User_Id"]];
-    const getUserAsset = await ctx.stub.invokeChaincode(
-      "user",
-      getUserAssetArgs,
-      "appchannel"
-    );
-
-    if (getUserAsset["status"] == 200) {
-      let userData = JSON.parse(getUserAsset["payload"].toString("utf8"));
-      console.log("userData");
-      console.log(userData);
-
-      // Create advertisement asset
-      let createAdvertisementAssetStatus =  await this.CreateAssetJson(ctx, assetJSON);
-      console.log("createAdvertisementAssetStatus");
-      console.log(createAdvertisementAssetStatus);
-
-
-      // Update "Energy_Advertised" field in User Chaincode
-      
-      console.log("increamenting energy advertised");
-      userData["Energy_Advertised"] = parseInt(userData["Energy_Advertised"].toString()) + parseInt(advertisementAssetJson["Energy_to_Sell"].toString());
-      console.log("After increamenting energy advertised");
-
-      console.log(userData);
-      let updateUserAssetArgs = ["UpdateAssetJson", advertisementAssetJson["User_Id"] ,JSON.stringify(userData)];
-      console.log("calling to update user asset");
-      console.log("updateUserAssetArgs");
-      console.log(updateUserAssetArgs);
-      const updateUserAsset = await ctx.stub.invokeChaincode(
+      // Get User Asset from User Chaincode
+      let getUserAssetArgs = ["GetAsset", advertisementAssetJson["User_Id"]];
+      const getUserAsset = await ctx.stub.invokeChaincode(
         "user",
-        updateUserAssetArgs,
+        getUserAssetArgs,
         "appchannel"
       );
 
-      if (updateUserAsset["status"] == 200) {
-        let updateUserAssetStatusData = updateUserAsset["payload"].toString("utf8");
-        console.log("updateUserAssetStatusData");
-        console.log(updateUserAssetStatusData);
+      if (getUserAsset["status"] == 200) {
+        let userData = JSON.parse(getUserAsset["payload"].toString("utf8"));
+        console.log("userData");
+        console.log(userData);
+
+        // Create advertisement asset
+        let createAdvertisementAssetStatus = await this.CreateAssetJson(
+          ctx,
+          assetJSON
+        );
+        console.log("createAdvertisementAssetStatus");
+        console.log(createAdvertisementAssetStatus);
+
+        // Update "Energy_Advertised" field in User Chaincode
+
+        console.log("increamenting energy advertised");
+        console.log("userData['Energy_Advertised']");
+        console.log(userData["Energy_Advertised"]);
+        console.log("advertisementAssetJson['Energy_to_Sell']");
+        console.log(advertisementAssetJson["Energy_to_Sell"]);
+        userData["Energy_Advertised"] =
+          parseInt(userData["Energy_Advertised"].toString()) +
+          parseInt(advertisementAssetJson["Energy_to_Sell"].toString());
+        console.log("After increamenting energy advertised");
+
+        console.log(userData);
+        let updateUserAssetArgs = [
+          "UpdateAssetJson",
+          advertisementAssetJson["User_Id"],
+          JSON.stringify(userData),
+        ];
+        console.log("calling to update user asset");
+        console.log("updateUserAssetArgs");
+        console.log(updateUserAssetArgs);
+        const updateUserAsset = await ctx.stub.invokeChaincode(
+          "user",
+          updateUserAssetArgs,
+          "appchannel"
+        );
+
+        if (updateUserAsset["status"] == 200) {
+          let updateUserAssetStatusData = updateUserAsset["payload"].toString(
+            "utf8"
+          );
+          console.log("updateUserAssetStatusData");
+          console.log(updateUserAssetStatusData);
+        } else {
+          returnValue["status"] = FAILURE_CODE;
+          returnValue[
+            "message"
+          ] = `Advertisement Chaincode - Failed to get update "Energy_Advertised" in user asset`;
+        }
       } else {
         returnValue["status"] = FAILURE_CODE;
-        returnValue["message"] = `Advertisement Chaincode - Failed to get update "Energy_Advertised" in user asset`;
+        returnValue[
+          "message"
+        ] = `Advertisement Chaincode - Failed to get User Asset`;
       }
-
-
-
-    } else {
+    } catch (error) {
       returnValue["status"] = FAILURE_CODE;
-      returnValue["message"] = `Advertisement Chaincode - Failed to get User Asset`;
+      returnValue[
+        "message"
+      ] = `Advertisement Chaincode - createAdvertisement Failed: ${error}`;
+    } finally {
+      return returnValue;
     }
-
-
-    
-  } catch (error) {
-    returnValue["status"] = FAILURE_CODE;
-    returnValue["message"] = `Advertisement Chaincode - createAdvertisement Failed: ${error}`;
-  } finally {
-    return returnValue;
-  }
-
-
   }
 }
 
