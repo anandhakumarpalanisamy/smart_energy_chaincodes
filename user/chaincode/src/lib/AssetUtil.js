@@ -36,6 +36,7 @@ async function CreateAssetJson(ctx, assetId, assetJSON, TransactionMessage) {
       assetData["TransactionMessage"] = TransactionMessage;
       assetData["TransactionUnixTimestamp"] = currentTimestamp.unix();
       assetData["TransactionIsoTimestamp"] = currentTimestamp.toISOString();
+      assetData["AssetId"] = assetId;
       await ctx.stub.putState(assetId, Buffer.from(JSON.stringify(assetData)));
       returnValue["message"] = `Asset ${assetId} created successfully`;
       console.info(returnValue["message"]);
