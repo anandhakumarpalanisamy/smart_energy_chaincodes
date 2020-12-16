@@ -1,6 +1,6 @@
 {
     "index":{
-        "fields":["TransactionUnixTimestamp"]
+        "fields":["AssetId","TransactionUnixTimestamp"]
     },
     "ddoc":"indexAdvertisementChaincodeDoc",
     "name":"indexAdvertisementChaincode",

@@ -7,6 +7,10 @@
 const { Contract } = require("fabric-contract-api");
 const AssetUtil = require("./AssetUtil");
 const ChaincodeUtil = require("./ChaincodeUtil");
+
+let SUCCESS_CODE = 200;
+let FAILURE_CODE = 500;
+
 class AdvertisementChaincode extends Contract {
   async InitLedger(ctx) {
     let initialAsset = [];
@@ -14,13 +18,8 @@ class AdvertisementChaincode extends Contract {
   }
 
   // CreateAsset issues a new asset to the world state with given details.
-  async CreateAssetJson(ctx, assetId, assetJSON, TransactionMessage) {
-    return AssetUtil.CreateAssetJson(
-      ctx,
-      assetId,
-      assetJSON,
-      TransactionMessage
-    );
+  async CreateAssetJson(ctx, assetJSON) {
+    return AssetUtil.CreateAssetJson(ctx, assetJSON);
   }
 
   // ReadAsset returns the asset stored in the world state with given id.
@@ -29,13 +28,8 @@ class AdvertisementChaincode extends Contract {
   }
 
   // UpdateAsset updates an existing asset in the world state with provided parameters.
-  async UpdateAssetJson(ctx, assetId, updateParamsJSON, TransactionMessage) {
-    return AssetUtil.UpdateAssetJson(
-      ctx,
-      assetId,
-      updateParamsJSON,
-      TransactionMessage
-    );
+  async UpdateAsset(ctx, updateParamsJSON) {
+    return AssetUtil.UpdateAsset(ctx, updateParamsJSON);
   }
 
   // DeleteAsset deletes an given asset from the world state.

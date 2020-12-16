@@ -1,8 +1,8 @@
 #!/bin/bash
 set -x #echo on
 ​
-CHAINCODE_NAME="user"
-CHAINCODE_CLASS_NAME="UserChaincode"
+CHAINCODE_NAME="advertisement"
+CHAINCODE_CLASS_NAME="AdvertisementChaincode"
 platform='unknown'
 
 git clone https://github.com/bityoga/fabric_chaincode_template.git $CHAINCODE_NAME
