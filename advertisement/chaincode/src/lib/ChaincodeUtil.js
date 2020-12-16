@@ -17,7 +17,10 @@ async function createAdvertisement(ctx, assetJSON) {
     let advertisement_id = advertisementAssetJson["Advertisement_Id"];
 
     // Get User Asset from User Chaincode
+
     let getUserAssetArgs = ["GetAsset", user_id];
+
+    console.log("invoking user chaincode to get user data");
     const getUserAsset = await ctx.stub.invokeChaincode(
       "user",
       getUserAssetArgs,
@@ -26,11 +29,9 @@ async function createAdvertisement(ctx, assetJSON) {
 
     if (getUserAsset["status"] == 200) {
       let userData = JSON.parse(getUserAsset["payload"].toString("utf8"));
-      console.log("userData");
-      console.log(userData);
-      console.log("userData keys");
-      console.log(Object.keys(userData));
-
+      console.log(
+        "creating new asset for the advertisement " + String(advertisement_id)
+      );
       let createAdvertisementAssetStatus = await AssetUtil.CreateAssetJson(
         ctx,
         advertisement_id,
@@ -41,18 +42,10 @@ async function createAdvertisement(ctx, assetJSON) {
       console.log(createAdvertisementAssetStatus);
 
       // Update "Energy_Advertised" field in User Chaincode
-
-      console.log("increamenting energy advertised");
-      console.log("userData['Energy_Advertised']");
-      console.log(userData["Energy_Advertised"]);
-      console.log("advertisementAssetJson['Energy_to_Sell']");
-      console.log(advertisementAssetJson["Energy_to_Sell"]);
       userData["Energy_Advertised"] =
         parseInt(userData["Energy_Advertised"].toString()) +
         parseInt(advertisementAssetJson["Energy_to_Sell"].toString());
-      console.log("After increamenting energy advertised");
 
-      console.log(userData);
       let updateUserAssetArgs = [
         "UpdateAssetJson",
         user_id,
@@ -60,7 +53,7 @@ async function createAdvertisement(ctx, assetJSON) {
         "Updated Total_Energy_Advertised after creating Advertisement Id " +
           String(advertisement_id),
       ];
-      console.log("calling to update user asset");
+      console.log("calling  user chaincode to update user asset");
       console.log("updateUserAssetArgs");
       console.log(updateUserAssetArgs);
       const updateUserAsset = await ctx.stub.invokeChaincode(
