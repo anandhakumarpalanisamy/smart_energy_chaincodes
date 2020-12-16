@@ -30,12 +30,12 @@ async function CreateAssetJson(ctx, assetJSON) {
       returnValue["message"] = `${assets.length} Assets created successfully`;
       console.info(returnValue["message"]);
     } else {
-        let currentTimestamp = moment();
-        asset.TransactionUnixTimestamp = currentTimestamp.unix();
-        asset.TransactionIsoTimestamp = currentTimestamp.toISOString();
-        await ctx.stub.putState(assets.ID, Buffer.from(JSON.stringify(assets)));
-        returnValue["message"] = `Asset ${assets.ID} created successfully`;
-        console.info(returnValue["message"]);
+      let currentTimestamp = moment();
+      assets.TransactionUnixTimestamp = currentTimestamp.unix();
+      assets.TransactionIsoTimestamp = currentTimestamp.toISOString();
+      await ctx.stub.putState(assets.ID, Buffer.from(JSON.stringify(assets)));
+      returnValue["message"] = `Asset ${assets.ID} created successfully`;
+      console.info(returnValue["message"]);
     }
   } catch (error) {
     returnValue["status"] = FAILURE_CODE;
