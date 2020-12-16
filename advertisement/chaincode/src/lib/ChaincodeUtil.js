@@ -13,9 +13,11 @@ async function createAdvertisement(ctx, assetJSON) {
   try {
     // Parse json object
     const advertisementAssetJson = JSON.parse(assetJSON);
+    let user_id = advertisementAssetJson["User_Id"];
+    let advertisement_id = advertisementAssetJson["Advertisement_Id"];
 
     // Get User Asset from User Chaincode
-    let getUserAssetArgs = ["GetAsset", advertisementAssetJson["User_Id"]];
+    let getUserAssetArgs = ["GetAsset", user_id];
     const getUserAsset = await ctx.stub.invokeChaincode(
       "user",
       getUserAssetArgs,
@@ -28,9 +30,6 @@ async function createAdvertisement(ctx, assetJSON) {
       console.log(userData);
       console.log("userData keys");
       console.log(Object.keys(userData));
-
-      // Create advertisement asset
-      let advertisement_id = advertisementAssetJson["Advertisement_Id"];
 
       let createAdvertisementAssetStatus = await AssetUtil.CreateAssetJson(
         ctx,
@@ -56,10 +55,10 @@ async function createAdvertisement(ctx, assetJSON) {
       console.log(userData);
       let updateUserAssetArgs = [
         "UpdateAssetJson",
-        advertisement_id,
+        user_id,
         JSON.stringify(userData),
         "Updated Total_Energy_Advertised after creating Advertisement Id " +
-          String(advertisementAssetJson["Advertisement_Id"]),
+          String(advertisement_id),
       ];
       console.log("calling to update user asset");
       console.log("updateUserAssetArgs");
