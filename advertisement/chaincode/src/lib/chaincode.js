@@ -127,6 +127,8 @@ class AdvertisementChaincode extends Contract {
         let userData = JSON.parse(getUserAsset["payload"].toString("utf8"));
         console.log("userData");
         console.log(userData);
+        console.log("userData keys");
+        console.log(Object.keys(userData));
 
         // Create advertisement asset
         let createAdvertisementAssetStatus = await this.CreateAssetJson(
