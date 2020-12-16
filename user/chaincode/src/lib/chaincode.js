@@ -13,8 +13,8 @@ class UserChaincode extends Contract {
   }
 
   // CreateAsset issues a new asset to the world state with given details.
-  async CreateAssetJson(ctx, assetJSON) {
-    return AssetUtil.CreateAssetJson(ctx, assetJSON);
+  async CreateAssetJson(ctx, assetJSON, TransactionMessage) {
+    return AssetUtil.CreateAssetJson(ctx, assetJSON, TransactionMessage);
   }
 
   // ReadAsset returns the asset stored in the world state with given id.
@@ -24,7 +24,7 @@ class UserChaincode extends Contract {
 
   // UpdateAsset updates an existing asset in the world state with provided parameters.
   async UpdateAssetJson(ctx, assetId, updateParamsJSON) {
-    return AssetUtil.UpdateAssetJson(ctx,assetId, updateParamsJSON);
+    return AssetUtil.UpdateAssetJson(ctx, assetId, updateParamsJSON);
   }
 
   // DeleteAsset deletes an given asset from the world state.
