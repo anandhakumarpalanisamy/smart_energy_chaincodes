@@ -82,7 +82,7 @@ async function UpdateAssetJson(ctx, id, updateParamsJSON, TransactionMessage) {
       returnValue["status"] = FAILURE_CODE;
       returnValue["message"] = `The asset ${id} does not exist`;
     } else {
-      let currentAsset = await this.GetAsset(ctx, id);
+      let currentAsset = JSON.parse(await this.GetAsset(ctx, id));
       console.log("currentAsset");
       console.log(currentAsset);
       let updateParams = JSON.parse(updateParamsJSON);
