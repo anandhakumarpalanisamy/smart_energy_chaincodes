@@ -155,6 +155,8 @@ class AdvertisementChaincode extends Contract {
           "UpdateAssetJson",
           advertisementAssetJson["User_Id"],
           JSON.stringify(userData),
+          "Updating Total_Energy_Advertised after creating Advertisement" +
+            String(advertisementAssetJson["Advertisement_Id"]),
         ];
         console.log("calling to update user asset");
         console.log("updateUserAssetArgs");

@@ -10,7 +10,7 @@ let SUCCESS_CODE = 200;
 let FAILURE_CODE = 500;
 
 // CreateAsset issues a new asset to the world state with given details.
-async function CreateAssetJson(ctx, assetJSON) {
+async function CreateAssetJson(ctx, assetJSON, TransactionMessage) {
   let returnValue = {};
   returnValue["status"] = SUCCESS_CODE;
 
@@ -24,6 +24,7 @@ async function CreateAssetJson(ctx, assetJSON) {
         currentTimestamp = moment();
         asset.TransactionUnixTimestamp = currentTimestamp.unix();
         asset.TransactionIsoTimestamp = currentTimestamp.toISOString();
+        asset.TransactionMessage = TransactionMessage;
         await ctx.stub.putState(asset.ID, Buffer.from(JSON.stringify(asset)));
         console.info(`Asset ${asset.ID} initialized`);
       }
@@ -31,6 +32,7 @@ async function CreateAssetJson(ctx, assetJSON) {
       console.info(returnValue["message"]);
     } else {
       let currentTimestamp = moment();
+      assets.TransactionMessage = TransactionMessage;
       assets.TransactionUnixTimestamp = currentTimestamp.unix();
       assets.TransactionIsoTimestamp = currentTimestamp.toISOString();
       await ctx.stub.putState(assets.ID, Buffer.from(JSON.stringify(assets)));
@@ -65,22 +67,36 @@ async function DeleteAsset(ctx, id) {
   }
 }
 // UpdateAsset updates an existing asset in the world state with provided parameters.
-async function UpdateAssetJson(ctx, id, updateParamsJSON) {
+async function UpdateAssetJson(ctx, id, updateParamsJSON, TransactionMessage) {
   let returnValue = {};
   returnValue["status"] = SUCCESS_CODE;
 
   try {
+    console.log("UpdateAssetJson");
+    console.log("id");
+    console.log(id);
+    console.log("updateParamsJSON");
+    console.log(updateParamsJSON);
     const exists = await this.AssetExists(ctx, id);
     if (!exists) {
       returnValue["status"] = FAILURE_CODE;
       returnValue["message"] = `The asset ${id} does not exist`;
     } else {
       let currentAsset = await this.GetAsset(ctx, id);
+      console.log("currentAsset");
+      console.log(currentAsset);
       let updateParams = JSON.parse(updateParamsJSON);
+      console.log("updateParams");
+      console.log(updateParams);
       let updatedAsset = update_obj(currentAsset, updateParams);
+      console.log("updatedAsset");
+      console.log(updatedAsset);
       let currentTimestamp = moment();
       updatedAsset.TransactionUnixTimestamp = currentTimestamp.unix();
       updatedAsset.TransactionIsoTimestamp = currentTimestamp.toISOString();
+      updatedAsset.TransactionMessage = TransactionMessage;
+      console.log("updatedAsset after timestamp");
+      console.log(updatedAsset);
       returnValue["message"] = ctx.stub.putState(
         id,
         Buffer.from(JSON.stringify(updatedAsset))
