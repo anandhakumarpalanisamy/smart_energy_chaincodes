@@ -10,33 +10,34 @@ let SUCCESS_CODE = 200;
 let FAILURE_CODE = 500;
 
 // CreateAsset issues a new asset to the world state with given details.
-async function CreateAssetJson(ctx, assetJSON, TransactionMessage) {
+async function CreateAssetJson(ctx, assetId, assetJSON, TransactionMessage) {
   let returnValue = {};
   returnValue["status"] = SUCCESS_CODE;
 
   try {
     // Parse json object
-    const assets = JSON.parse(assetJSON);
+    const assetData = JSON.parse(assetJSON);
     // If array of objects, loop through them
-    if (Array.isArray(assets)) {
+    if (Array.isArray(assetData)) {
       let currentTimestamp;
-      for (const asset of assets) {
+      for (const asset of assetData) {
         currentTimestamp = moment();
-        asset.TransactionUnixTimestamp = currentTimestamp.unix();
-        asset.TransactionIsoTimestamp = currentTimestamp.toISOString();
-        asset.TransactionMessage = TransactionMessage;
-        await ctx.stub.putState(asset.ID, Buffer.from(JSON.stringify(asset)));
-        console.info(`Asset ${asset.ID} initialized`);
+        asset["TransactionUnixTimestamp"] = currentTimestamp.unix();
+        asset["TransactionIsoTimestamp"] = currentTimestamp.toISOString();
+        asset["TransactionMessage"] = TransactionMessage;
+        asset["AssetId"] = assetId;
+        await ctx.stub.putState(assetId, Buffer.from(JSON.stringify(asset)));
+        console.info(`Asset ${assetId} initialized`);
       }
       returnValue["message"] = `${assets.length} Assets created successfully`;
       console.info(returnValue["message"]);
     } else {
       let currentTimestamp = moment();
-      assets.TransactionMessage = TransactionMessage;
-      assets.TransactionUnixTimestamp = currentTimestamp.unix();
-      assets.TransactionIsoTimestamp = currentTimestamp.toISOString();
-      await ctx.stub.putState(assets.ID, Buffer.from(JSON.stringify(assets)));
-      returnValue["message"] = `Asset ${assets.ID} created successfully`;
+      assetData["TransactionMessage"] = TransactionMessage;
+      assetData["TransactionUnixTimestamp"] = currentTimestamp.unix();
+      assetData["TransactionIsoTimestamp"] = currentTimestamp.toISOString();
+      await ctx.stub.putState(assetId, Buffer.from(JSON.stringify(assetData)));
+      returnValue["message"] = `Asset ${assetId} created successfully`;
       console.info(returnValue["message"]);
     }
   } catch (error) {
@@ -72,31 +73,18 @@ async function UpdateAssetJson(ctx, id, updateParamsJSON, TransactionMessage) {
   returnValue["status"] = SUCCESS_CODE;
 
   try {
-    console.log("UpdateAssetJson");
-    console.log("id");
-    console.log(id);
-    console.log("updateParamsJSON");
-    console.log(updateParamsJSON);
     const exists = await this.AssetExists(ctx, id);
     if (!exists) {
       returnValue["status"] = FAILURE_CODE;
       returnValue["message"] = `The asset ${id} does not exist`;
     } else {
       let currentAsset = JSON.parse(await this.GetAsset(ctx, id));
-      console.log("currentAsset");
-      console.log(currentAsset);
       let updateParams = JSON.parse(updateParamsJSON);
-      console.log("updateParams");
-      console.log(updateParams);
       let updatedAsset = update_obj(currentAsset, updateParams);
-      console.log("updatedAsset");
-      console.log(updatedAsset);
       let currentTimestamp = moment();
-      updatedAsset.TransactionUnixTimestamp = currentTimestamp.unix();
-      updatedAsset.TransactionIsoTimestamp = currentTimestamp.toISOString();
-      updatedAsset.TransactionMessage = TransactionMessage;
-      console.log("updatedAsset after timestamp");
-      console.log(updatedAsset);
+      updatedAsset["TransactionUnixTimestamp"] = currentTimestamp.unix();
+      updatedAsset["TransactionIsoTimestamp"] = currentTimestamp.toISOString();
+      updatedAsset["TransactionMessage"] = TransactionMessage;
       returnValue["message"] = ctx.stub.putState(
         id,
         Buffer.from(JSON.stringify(updatedAsset))

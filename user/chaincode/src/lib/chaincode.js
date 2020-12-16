@@ -13,8 +13,13 @@ class UserChaincode extends Contract {
   }
 
   // CreateAsset issues a new asset to the world state with given details.
-  async CreateAssetJson(ctx, assetJSON, TransactionMessage) {
-    return AssetUtil.CreateAssetJson(ctx, assetJSON, TransactionMessage);
+  async CreateAssetJson(ctx, assetId, assetJSON, TransactionMessage) {
+    return AssetUtil.CreateAssetJson(
+      ctx,
+      assetId,
+      assetJSON,
+      TransactionMessage
+    );
   }
 
   // ReadAsset returns the asset stored in the world state with given id.
