@@ -18,9 +18,7 @@ function validateEnergyTransaction(
   let total_cost =
     parseInt(advertisementData["Price"].toString()) *
     parseInt(energy_to_buy.toString());
-  if (
-    parseInt(advertisementData["Energy_to_Sell"].toString()) < energy_to_buy
-  ) {
+  if (parseInt(advertisementData["Energy_To_Buy"].toString()) < energy_to_buy) {
     returnValue["status"] = AssetUtil.FAILURE_CODE;
     returnValue["message"] =
       "Advertisement does not have sufficient energy to sell";
@@ -156,7 +154,7 @@ async function buyEnergy(ctx, assetJSON) {
         // Update "Seller User Data" field in User Chaincode
         sellerUserData["Total_Energy_Sold"] =
           parseInt(sellerUserData["Total_Energy_Sold"].toString()) +
-          parseInt(buyEnergyJson["Energy_to_Sell"].toString());
+          parseInt(buyEnergyJson["Energy_To_Buy"].toString());
 
         sellerUserData["Energy_Token_Balance"] =
           parseInt(sellerUserData["Energy_Token_Balance"].toString()) +
@@ -164,7 +162,7 @@ async function buyEnergy(ctx, assetJSON) {
 
         sellerUserData["Battery_Capacity"] =
           parseInt(sellerUserData["Battery_Capacity"].toString()) -
-          parseInt(buyEnergyJson["Energy_to_Sell"].toString());
+          parseInt(buyEnergyJson["Energy_To_Buy"].toString());
 
         let updateSellerUserAssetArgs = [
           "UpdateAssetJson",
@@ -200,7 +198,7 @@ async function buyEnergy(ctx, assetJSON) {
         // Update "Buyer User Data" field in User Chaincode
         buyerUserData["Total_Energy_Purchased"] =
           parseInt(buyerUserData["Total_Energy_Purchased"].toString()) +
-          parseInt(buyEnergyJson["Energy_to_Sell"].toString());
+          parseInt(buyEnergyJson["Energy_To_Buy"].toString());
 
         buyerUserData["Energy_Token_Balance"] =
           parseInt(buyerUserData["Energy_Token_Balance"].toString()) -
@@ -208,7 +206,7 @@ async function buyEnergy(ctx, assetJSON) {
 
         buyerUserData["Battery_Capacity"] =
           parseInt(buyerUserData["Battery_Capacity"].toString()) +
-          parseInt(buyEnergyJson["Energy_to_Sell"].toString());
+          parseInt(buyEnergyJson["Energy_To_Buy"].toString());
 
         let updateBuyerUserAssetArgs = [
           "UpdateAssetJson",
@@ -244,11 +242,11 @@ async function buyEnergy(ctx, assetJSON) {
         // Update Advertisement Chaincode
         advertisementData["Energy_Sold"] =
           parseInt(advertisementData["Energy_Sold"].toString()) +
-          parseInt(buyEnergyJson["Energy_to_Sell"].toString());
+          parseInt(buyEnergyJson["Energy_To_Buy"].toString());
 
         advertisementData["Energy_Remaining"] =
           parseInt(advertisementData["Energy_Remaining"].toString()) -
-          parseInt(buyEnergyJson["Energy_to_Sell"].toString());
+          parseInt(buyEnergyJson["Energy_To_Buy"].toString());
 
         advertisementData["Number_of_Purchases"] =
           parseInt(advertisementData["Number_of_Purchases"].toString()) + 1;
