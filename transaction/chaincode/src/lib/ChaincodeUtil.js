@@ -61,8 +61,12 @@ async function buyEnergy(ctx, assetJSON) {
   let returnValue = {};
   returnValue["status"] = AssetUtil.SUCCESS_CODE;
   try {
+    console.log("Inside buyEnergy");
     // Parse json object
     const buyEnergyJson = JSON.parse(assetJSON);
+
+    console.log("buyEnergyJson");
+    console.log(buyEnergyJson);
 
     let advertisement_id = buyEnergyJson["Advertisement_Id"];
     let seller_user_id = buyEnergyJson["Seller_User_Id"];
@@ -70,8 +74,8 @@ async function buyEnergy(ctx, assetJSON) {
     let energy_to_buy = buyEnergyJson["Energy_To_Buy"];
 
     // Get Advertisement Asset from User Chaincode
-    let getAdvertisementAssetArgs = ["GetAsset", advertisement_id];
     console.log("invoking user chaincode to get seller user data");
+    let getAdvertisementAssetArgs = ["GetAsset", advertisement_id];
     const getAdvertisementAsset = await ctx.stub.invokeChaincode(
       "advertisement",
       getAdvertisementAssetArgs,
@@ -79,8 +83,8 @@ async function buyEnergy(ctx, assetJSON) {
     );
 
     // Get Seller User Asset from User Chaincode
-    let getSellerUserAssetArgs = ["GetAsset", seller_user_id];
     console.log("invoking user chaincode to get seller user data");
+    let getSellerUserAssetArgs = ["GetAsset", seller_user_id];
     const getSellerUserAsset = await ctx.stub.invokeChaincode(
       "user",
       getSellerUserAssetArgs,
@@ -88,8 +92,8 @@ async function buyEnergy(ctx, assetJSON) {
     );
 
     // Get Buyer User Asset from User Chaincode
-    let getBuyerUserAssetArgs = ["GetAsset", buyer_user_id];
     console.log("invoking user chaincode to get buyer user data");
+    let getBuyerUserAssetArgs = ["GetAsset", buyer_user_id];
     const getBuyerUserAsset = await ctx.stub.invokeChaincode(
       "user",
       getBuyerUserAssetArgs,
@@ -102,6 +106,8 @@ async function buyEnergy(ctx, assetJSON) {
         getSellerUserAsset["status"] == 200 &&
         getBuyerUserAsset["status"] == 200)
     ) {
+      console.log("getAdvertisementAsset");
+      console.log(getAdvertisementAsset);
       let advertisementData = JSON.parse(
         getAdvertisementAsset["payload"].toString("utf8")
       );
