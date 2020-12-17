@@ -18,7 +18,9 @@ function validateEnergyTransaction(
   let total_cost =
     parseInt(advertisementData["Price"].toString()) *
     parseInt(energy_to_buy.toString());
-  if (parseInt(advertisementData["Energy_To_Buy"].toString()) < energy_to_buy) {
+  if (
+    parseInt(advertisementData["Energy_to_Sell"].toString()) < energy_to_buy
+  ) {
     returnValue["status"] = AssetUtil.FAILURE_CODE;
     returnValue["message"] =
       "Advertisement does not have sufficient energy to sell";
