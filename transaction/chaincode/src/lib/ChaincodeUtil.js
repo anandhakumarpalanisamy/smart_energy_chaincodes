@@ -19,7 +19,7 @@ function validateEnergyTransaction(
     parseInt(advertisementData["Price"].toString()) *
     parseInt(energy_to_buy.toString());
   if (
-    parseInt(advertisementData["Energy_Advertised"].toString()) < energy_to_buy
+    parseInt(advertisementData["Energy_to_Sell"].toString()) < energy_to_buy
   ) {
     returnValue["status"] = AssetUtil.FAILURE_CODE;
     returnValue["message"] =
