@@ -6,9 +6,7 @@
 
 const { Contract } = require("fabric-contract-api");
 const AssetUtil = require("./AssetUtil");
-let SUCCESS_CODE = 200;
-let FAILURE_CODE = 500;
-
+const ChaincodeUtil = require("./ChaincodeUtil");
 class TransactionChaincode extends Contract {
   async InitLedger(ctx) {
     let initialAsset = [];
@@ -16,8 +14,13 @@ class TransactionChaincode extends Contract {
   }
 
   // CreateAsset issues a new asset to the world state with given details.
-  async CreateAssetJson(ctx, assetJSON) {
-    return AssetUtil.CreateAssetJson(ctx, assetJSON);
+  async CreateAssetJson(ctx, assetId, assetJSON, TransactionMessage) {
+    return AssetUtil.CreateAssetJson(
+      ctx,
+      assetId,
+      assetJSON,
+      TransactionMessage
+    );
   }
 
   // ReadAsset returns the asset stored in the world state with given id.
@@ -26,8 +29,13 @@ class TransactionChaincode extends Contract {
   }
 
   // UpdateAsset updates an existing asset in the world state with provided parameters.
-  async UpdateAsset(ctx, updateParamsJSON) {
-    return AssetUtil.UpdateAsset(ctx, updateParamsJSON);
+  async UpdateAssetJson(ctx, assetId, updateParamsJSON, TransactionMessage) {
+    return AssetUtil.UpdateAssetJson(
+      ctx,
+      assetId,
+      updateParamsJSON,
+      TransactionMessage
+    );
   }
 
   // DeleteAsset deletes an given asset from the world state.
@@ -107,38 +115,8 @@ class TransactionChaincode extends Contract {
     return AssetUtil.GetAllAssets(ctx);
   }
 
-  // GetAllAssets returns all assets found in the world state.
-  async BuyEnergy(ctx, buyEnergyJsonParams) {
-    let returnValue = {};
-    returnValue["status"] = SUCCESS_CODE;
-    try {
-      // Parse json object
-      const buyEnergyJson = JSON.parse(buyEnergyJsonParams);
-      console.log("Buy Energy Json Params");
-      console.log(buyEnergyJson);
-      let queryArgs = ["GetAsset", buyEnergyJson.Advertisement_Id];
-      const advertisement_asset = await ctx.stub.invokeChaincode(
-        "advertisement",
-        queryArgs,
-        "appchannel"
-      );
-      console.log("advertisement_asset");
-      console.log(advertisement_asset);
-      if (advertisement_asset.status == 200) {
-        let advertisement_data = advertisement_asset.payload.toString("utf8");
-        console.log("advertisement_data");
-        console.log(advertisement_data);
-        returnValue["data"] = advertisement_data;
-      } else {
-        returnValue["status"] = FAILURE_CODE;
-        returnValue["message"] = `Failed to get advertisement asset`;
-      }
-    } catch (error) {
-      returnValue["status"] = FAILURE_CODE;
-      returnValue["message"] = `BuyEnergy Failed: ${error}`;
-    } finally {
-      return returnValue;
-    }
+  async buyEnergy(ctx, assetJSON) {
+    return ChaincodeUtil.buyEnergy(ctx, assetJSON);
   }
 }
 
