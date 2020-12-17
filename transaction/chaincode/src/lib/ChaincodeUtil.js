@@ -111,12 +111,18 @@ async function buyEnergy(ctx, assetJSON) {
       let advertisementData = JSON.parse(
         getAdvertisementAsset["payload"].toString("utf8")
       );
+      console.log("advertisementData");
+      console.log(advertisementData);
       let sellerUserData = JSON.parse(
         getSellerUserAsset["payload"].toString("utf8")
       );
+      console.log("sellerUserData");
+      console.log(sellerUserData);
       let buyerUserData = JSON.parse(
         getBuyerUserAsset["payload"].toString("utf8")
       );
+      console.log("buyerUserData");
+      console.log(buyerUserData);
 
       let validateEnergyTransactionStatus = validateEnergyTransaction(
         advertisementData,
@@ -124,6 +130,8 @@ async function buyEnergy(ctx, assetJSON) {
         buyerUserData,
         energy_to_buy
       );
+      console.log("validateEnergyTransactionStatus");
+      console.log(validateEnergyTransactionStatus);
 
       if (validateEnergyTransactionStatus["status"] == AssetUtil.SUCCESS_CODE) {
         // Create Transaction
