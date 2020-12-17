@@ -11,13 +11,11 @@ function validateEnergyTransaction(
   advertisementData,
   sellerUserData,
   buyerUserData,
-  energy_to_buy
+  energy_to_buy,
+  total_cost
 ) {
   let returnValue = {};
   returnValue["status"] = AssetUtil.SUCCESS_CODE;
-  let total_cost =
-    parseInt(advertisementData["Price"].toString()) *
-    parseInt(energy_to_buy.toString());
   if (
     parseInt(advertisementData["Energy_to_Sell"].toString()) < energy_to_buy
   ) {
@@ -124,11 +122,16 @@ async function buyEnergy(ctx, assetJSON) {
       console.log("buyerUserData");
       console.log(buyerUserData);
 
+      let total_cost =
+        parseInt(advertisementData["Price"].toString()) *
+        parseInt(energy_to_buy.toString());
+
       let validateEnergyTransactionStatus = validateEnergyTransaction(
         advertisementData,
         sellerUserData,
         buyerUserData,
-        energy_to_buy
+        energy_to_buy,
+        total_cost
       );
       console.log("validateEnergyTransactionStatus");
       console.log(validateEnergyTransactionStatus);
