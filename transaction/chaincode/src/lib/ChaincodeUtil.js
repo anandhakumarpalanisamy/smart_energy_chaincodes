@@ -11,11 +11,13 @@ function validateEnergyTransaction(
   advertisementData,
   sellerUserData,
   buyerUserData,
-  energy_to_buy,
-  total_cost
+  energy_to_buy
 ) {
   let returnValue = {};
   returnValue["status"] = AssetUtil.SUCCESS_CODE;
+  let total_cost =
+    parseInt(advertisementData["Price"].toString()) *
+    parseInt(energy_to_buy.toString());
   if (
     parseInt(advertisementData["Energy_Advertised"].toString()) < energy_to_buy
   ) {
@@ -66,9 +68,6 @@ async function buyEnergy(ctx, assetJSON) {
     let seller_user_id = buyEnergyJson["Seller_User_Id"];
     let buyer_user_id = buyEnergyJson["Buyer_User_Id"];
     let energy_to_buy = buyEnergyJson["Energy_To_Buy"];
-    let price_per_kw = buyEnergyJson["price_per_kw"];
-    let total_cost =
-      parseInt(energy_to_buy.toString()) * parseInt(price_per_kw.toString());
 
     // Get Advertisement Asset from User Chaincode
     let getAdvertisementAssetArgs = ["GetAsset", advertisement_id];
@@ -117,8 +116,7 @@ async function buyEnergy(ctx, assetJSON) {
         advertisementData,
         sellerUserData,
         buyerUserData,
-        energy_to_buy,
-        total_cost
+        energy_to_buy
       );
 
       if (validateEnergyTransactionStatus["status"] == AssetUtil.SUCCESS_CODE) {
