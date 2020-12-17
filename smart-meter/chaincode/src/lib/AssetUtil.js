@@ -10,28 +10,35 @@ let SUCCESS_CODE = 200;
 let FAILURE_CODE = 500;
 
 // CreateAsset issues a new asset to the world state with given details.
-async function CreateAssetJson(ctx, assetJSON) {
+async function CreateAssetJson(ctx, assetId, assetJSON, TransactionMessage) {
   let returnValue = {};
   returnValue["status"] = SUCCESS_CODE;
 
   try {
     // Parse json object
-    const assets = JSON.parse(assetJSON);
+    const assetData = JSON.parse(assetJSON);
     // If array of objects, loop through them
-    if (Array.isArray(assets)) {
+    if (Array.isArray(assetData)) {
       let currentTimestamp;
-      for (const asset of assets) {
+      for (const asset of assetData) {
         currentTimestamp = moment();
-        asset.TransactionUnixTimestamp = currentTimestamp.unix();
-        asset.TransactionIsoTimestamp = currentTimestamp.toISOString();
-        await ctx.stub.putState(asset.ID, Buffer.from(JSON.stringify(asset)));
-        console.info(`Asset ${asset.ID} initialized`);
+        asset["TransactionUnixTimestamp"] = currentTimestamp.unix();
+        asset["TransactionIsoTimestamp"] = currentTimestamp.toISOString();
+        asset["TransactionMessage"] = TransactionMessage;
+        asset["AssetId"] = assetId;
+        await ctx.stub.putState(assetId, Buffer.from(JSON.stringify(asset)));
+        console.info(`Asset ${assetId} initialized`);
       }
       returnValue["message"] = `${assets.length} Assets created successfully`;
       console.info(returnValue["message"]);
     } else {
-      await ctx.stub.putState(assets.ID, Buffer.from(JSON.stringify(assets)));
-      returnValue["message"] = `Asset ${assets.ID} created successfully`;
+      let currentTimestamp = moment();
+      assetData["TransactionMessage"] = TransactionMessage;
+      assetData["TransactionUnixTimestamp"] = currentTimestamp.unix();
+      assetData["TransactionIsoTimestamp"] = currentTimestamp.toISOString();
+      assetData["AssetId"] = assetId;
+      await ctx.stub.putState(assetId, Buffer.from(JSON.stringify(assetData)));
+      returnValue["message"] = `Asset ${assetId} created successfully`;
       console.info(returnValue["message"]);
     }
   } catch (error) {
@@ -62,7 +69,7 @@ async function DeleteAsset(ctx, id) {
   }
 }
 // UpdateAsset updates an existing asset in the world state with provided parameters.
-async function UpdateAssetJson(ctx, id, updateParamsJSON) {
+async function UpdateAssetJson(ctx, id, updateParamsJSON, TransactionMessage) {
   let returnValue = {};
   returnValue["status"] = SUCCESS_CODE;
 
@@ -72,12 +79,13 @@ async function UpdateAssetJson(ctx, id, updateParamsJSON) {
       returnValue["status"] = FAILURE_CODE;
       returnValue["message"] = `The asset ${id} does not exist`;
     } else {
-      let currentAsset = await this.GetAsset(ctx, id);
+      let currentAsset = JSON.parse(await this.GetAsset(ctx, id));
       let updateParams = JSON.parse(updateParamsJSON);
       let updatedAsset = update_obj(currentAsset, updateParams);
       let currentTimestamp = moment();
-      updatedAsset.TransactionUnixTimestamp = currentTimestamp.unix();
-      updatedAsset.TransactionIsoTimestamp = currentTimestamp.toISOString();
+      updatedAsset["TransactionUnixTimestamp"] = currentTimestamp.unix();
+      updatedAsset["TransactionIsoTimestamp"] = currentTimestamp.toISOString();
+      updatedAsset["TransactionMessage"] = TransactionMessage;
       returnValue["message"] = ctx.stub.putState(
         id,
         Buffer.from(JSON.stringify(updatedAsset))
@@ -103,7 +111,7 @@ async function GetAsset(ctx, id) {
   if (!assetJSON || assetJSON.length === 0) {
     throw new Error(`The asset ${id} does not exist`);
   }
-  return assetJSON;
+  return assetJSON.toString();
 }
 // GetQueryResultForQueryString executes the passed in query string.
 // Result set is built and returned as a byte array containing the JSON results.
@@ -262,6 +270,8 @@ function update_obj(obj /*, …*/) {
 }
 
 module.exports = {
+  SUCCESS_CODE: SUCCESS_CODE,
+  FAILURE_CODE: FAILURE_CODE,
   CreateAssetJson: CreateAssetJson,
   DeleteAsset: DeleteAsset,
   UpdateAssetJson: UpdateAssetJson,

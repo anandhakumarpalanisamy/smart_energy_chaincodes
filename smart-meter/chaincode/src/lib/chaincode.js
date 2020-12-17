@@ -13,8 +13,13 @@ class SmartMeterChaincode extends Contract {
   }
 
   // CreateAsset issues a new asset to the world state with given details.
-  async CreateAssetJson(ctx, assetJSON) {
-    return AssetUtil.CreateAssetJson(ctx, assetJSON);
+  async CreateAssetJson(ctx, assetId, assetJSON, TransactionMessage) {
+    return AssetUtil.CreateAssetJson(
+      ctx,
+      assetId,
+      assetJSON,
+      TransactionMessage
+    );
   }
 
   // ReadAsset returns the asset stored in the world state with given id.
@@ -23,8 +28,13 @@ class SmartMeterChaincode extends Contract {
   }
 
   // UpdateAsset updates an existing asset in the world state with provided parameters.
-  async UpdateAsset(ctx, updateParamsJSON) {
-    return AssetUtil.UpdateAsset(ctx, updateParamsJSON);
+  async UpdateAssetJson(ctx, assetId, updateParamsJSON, TransactionMessage) {
+    return AssetUtil.UpdateAssetJson(
+      ctx,
+      assetId,
+      updateParamsJSON,
+      TransactionMessage
+    );
   }
 
   // DeleteAsset deletes an given asset from the world state.

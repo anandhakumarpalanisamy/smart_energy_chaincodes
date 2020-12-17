@@ -1,8 +1,8 @@
 #!/bin/bash
 set -x #echo on
 ​
-CHAINCODE_NAME="transaction"
-CHAINCODE_CLASS_NAME="TransactionChaincode"
+CHAINCODE_NAME="smart-meter"
+CHAINCODE_CLASS_NAME="SmartMeterChaincode"
 platform='unknown'
 
 git clone https://github.com/bityoga/fabric_chaincode_template.git $CHAINCODE_NAME

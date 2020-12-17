@@ -270,6 +270,8 @@ function update_obj(obj /*, …*/) {
 }
 
 module.exports = {
+  SUCCESS_CODE: SUCCESS_CODE,
+  FAILURE_CODE: FAILURE_CODE,
   CreateAssetJson: CreateAssetJson,
   DeleteAsset: DeleteAsset,
   UpdateAssetJson: UpdateAssetJson,

@@ -46,6 +46,10 @@ async function createAdvertisement(ctx, assetJSON) {
         parseInt(userData["Energy_Advertised"].toString()) +
         parseInt(advertisementAssetJson["Energy_to_Sell"].toString());
 
+      // Update "Energy_Advertised" field in User Chaincode
+      userData["Total_Advertisements"] =
+        parseInt(userData["Total_Advertisements"].toString()) + 1;
+
       let updateUserAssetArgs = [
         "UpdateAssetJson",
         user_id,

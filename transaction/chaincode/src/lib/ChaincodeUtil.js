@@ -35,7 +35,7 @@ function validateEnergyTransaction(
       ) {
         returnValue["status"] = AssetUtil.FAILURE_CODE;
         returnValue["message"] =
-          "Buyer does not have sufficient Battery Capacity";
+          "Buyer does not have sufficient Battery Capacity to hold Energy";
       } else {
         if (
           parseInt(buyerUserData["Energy_Token_Balance"].toString()) -
@@ -167,6 +167,10 @@ async function buyEnergy(ctx, assetJSON) {
 
         sellerUserData["Battery_Capacity"] =
           parseInt(sellerUserData["Battery_Capacity"].toString()) -
+          parseInt(buyEnergyJson["Energy_To_Buy"].toString());
+
+        sellerUserData["Energy_Advertised"] =
+          parseInt(sellerUserData["Energy_Advertised"].toString()) -
           parseInt(buyEnergyJson["Energy_To_Buy"].toString());
 
         let updateSellerUserAssetArgs = [
