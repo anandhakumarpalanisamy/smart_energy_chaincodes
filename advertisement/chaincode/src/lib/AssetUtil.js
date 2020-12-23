@@ -54,7 +54,7 @@ async function DeleteAsset(ctx, id) {
   returnValue["status"] = SUCCESS_CODE;
 
   try {
-    const exists = await this.AssetExists(ctx, id);
+    const exists = await AssetExists(ctx, id);
     if (!exists) {
       returnValue["status"] = FAILURE_CODE;
       returnValue["message"] = `The asset ${id} does not exist`;
@@ -74,12 +74,12 @@ async function UpdateAssetJson(ctx, id, updateParamsJSON, TransactionMessage) {
   returnValue["status"] = SUCCESS_CODE;
 
   try {
-    const exists = await this.AssetExists(ctx, id);
+    const exists = await AssetExists(ctx, id);
     if (!exists) {
       returnValue["status"] = FAILURE_CODE;
       returnValue["message"] = `The asset ${id} does not exist`;
     } else {
-      let currentAsset = JSON.parse(await this.GetAsset(ctx, id));
+      let currentAsset = JSON.parse(await GetAsset(ctx, id));
       let updateParams = JSON.parse(updateParamsJSON);
       let updatedAsset = update_obj(currentAsset, updateParams);
       let currentTimestamp = moment();
@@ -117,7 +117,7 @@ async function GetAsset(ctx, id) {
 // Result set is built and returned as a byte array containing the JSON results.
 async function GetQueryResultForQueryString(ctx, queryString) {
   let resultsIterator = await ctx.stub.getQueryResult(queryString);
-  let results = await this.GetAllResults(resultsIterator, false);
+  let results = await GetAllResults(resultsIterator, false);
 
   return JSON.stringify(results);
 }
@@ -129,7 +129,7 @@ async function GetQueryResultForQueryString(ctx, queryString) {
 // If this is not desired, follow the QueryAssetsForOwner example for parameterized queries.
 // Only available on state databases that support rich query (e.g. CouchDB)
 async function QueryAssets(ctx, queryString) {
-  return await this.GetQueryResultForQueryString(ctx, queryString);
+  return await GetQueryResultForQueryString(ctx, queryString);
 }
 
 // Example: Pagination with Range Query
@@ -154,7 +154,7 @@ async function GetAssetsByRangeWithPagination(
   console.log(iterator);
   console.log("metadata");
   console.log(JSON.stringify(metadata));
-  const results = await this.GetAllResults(iterator, false);
+  const results = await GetAllResults(iterator, false);
   const final_output = {};
   final_output["RecordsCount"] = metadata.fetchedRecordsCount;
   final_output["Bookmark"] = metadata.bookmark;
@@ -183,7 +183,7 @@ async function QueryAssetsWithPagination(ctx, queryString, pageSize, bookmark) {
   console.log(iterator);
   console.log("metadata");
   console.log(JSON.stringify(metadata));
-  const results = await this.GetAllResults(iterator, false);
+  const results = await GetAllResults(iterator, false);
   const final_output = {};
   final_output["RecordsCount"] = metadata.fetchedRecordsCount;
   final_output["Bookmark"] = metadata.bookmark;
@@ -195,7 +195,7 @@ async function QueryAssetsWithPagination(ctx, queryString, pageSize, bookmark) {
 // GetAssetHistory returns the chain of custody for an asset since issuance.
 async function GetAssetHistory(ctx, assetId) {
   let resultsIterator = await ctx.stub.getHistoryForKey(assetId);
-  let results = await this.GetAllResults(resultsIterator, true);
+  let results = await GetAllResults(resultsIterator, true);
 
   return JSON.stringify(results);
 }
