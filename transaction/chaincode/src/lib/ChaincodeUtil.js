@@ -126,6 +126,8 @@ async function buyEnergy(ctx, assetJSON) {
         parseInt(advertisementData["Price"].toString()) *
         parseInt(energy_to_buy.toString());
 
+      buyEnergyJson["Price"] = total_cost;
+
       let validateEnergyTransactionStatus = validateEnergyTransaction(
         advertisementData,
         sellerUserData,
@@ -150,7 +152,7 @@ async function buyEnergy(ctx, assetJSON) {
         let createTransactionAssetStatus = await AssetUtil.CreateAssetJson(
           ctx,
           transaction_id,
-          assetJSON,
+          JSON.stringify(buyEnergyJson),
           "Created Transaction with id " + String(transaction_id)
         );
         console.log("createTransactionAssetStatus");
