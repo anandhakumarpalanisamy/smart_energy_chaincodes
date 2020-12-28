@@ -55,6 +55,42 @@ function validateEnergyTransaction(
   return returnValue;
 }
 
+function createTransactionData(
+  buyEnergyJson,
+  sellerUserData,
+  buyerUserData,
+  total_cost
+) {
+  buyEnergyJson["Price"] = total_cost;
+
+  buyEnergyJson["Seller_Wallet_Balance_Before_Transaction"] = parseInt(
+    sellerUserData["Energy_Token_Balance"].toString()
+  );
+  buyEnergyJson["Buyer_Wallet_Balance_Before_Transaction"] = parseInt(
+    buyerUserData["Energy_Token_Balance"].toString()
+  );
+  buyEnergyJson["Seller_Wallet_Balance_After_Transaction"] =
+    parseInt(sellerUserData["Energy_Token_Balance"].toString()) +
+    parseInt(total_cost.toString());
+  buyEnergyJson["Buyer_Wallet_Balance_After_Transaction"] =
+    parseInt(buyerUserData["Energy_Token_Balance"].toString()) -
+    parseInt(total_cost.toString());
+
+  buyEnergyJson["Seller_Battery_Capacity_Before_Transaction"] = parseInt(
+    sellerUserData["Battery_Capacity"].toString()
+  );
+  buyEnergyJson["Buyer_Battery_Capacity_Before_Transaction"] = parseInt(
+    buyerUserData["Battery_Capacity"].toString()
+  );
+  buyEnergyJson["Seller_Battery_Capacity_After_Transaction"] =
+    parseInt(sellerUserData["Battery_Capacity"].toString()) -
+    parseInt(buyEnergyJson["Energy_To_Buy"].toString());
+  buyEnergyJson["Buyer_Battery_Capacity_After_Transaction"] =
+    parseInt(buyerUserData["Battery_Capacity"].toString()) +
+    parseInt(buyEnergyJson["Energy_To_Buy"].toString());
+  return buyEnergyJson;
+}
+
 async function buyEnergy(ctx, assetJSON) {
   let returnValue = {};
   returnValue["status"] = AssetUtil.SUCCESS_CODE;
@@ -126,8 +162,6 @@ async function buyEnergy(ctx, assetJSON) {
         parseInt(advertisementData["Price"].toString()) *
         parseInt(energy_to_buy.toString());
 
-      buyEnergyJson["Price"] = total_cost;
-
       let validateEnergyTransactionStatus = validateEnergyTransaction(
         advertisementData,
         sellerUserData,
@@ -149,10 +183,18 @@ async function buyEnergy(ctx, assetJSON) {
         console.log(
           "creating new asset for the Transaction " + String(transaction_id)
         );
+
+        let transationData = createTransactionData(
+          buyEnergyJson,
+          sellerUserData,
+          buyerUserData,
+          total_cost
+        );
+
         let createTransactionAssetStatus = await AssetUtil.CreateAssetJson(
           ctx,
           transaction_id,
-          JSON.stringify(buyEnergyJson),
+          JSON.stringify(transationData),
           "Created Transaction with id " + String(transaction_id)
         );
         console.log("createTransactionAssetStatus");
