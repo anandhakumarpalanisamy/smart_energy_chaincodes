@@ -29,13 +29,22 @@ async function createAdvertisement(ctx, assetJSON) {
 
     if (getUserAsset["status"] == 200) {
       let userData = JSON.parse(getUserAsset["payload"].toString("utf8"));
+
       console.log(
         "creating new asset for the advertisement " + String(advertisement_id)
       );
+
+      // Create Advertisement Posted Timestamp
+      let currentTimestamp = moment();
+      advertisementAssetJson["CreatedUnixTimestamp"] = currentTimestamp.unix();
+      advertisementAssetJson[
+        "CreatedIsoTimestamp"
+      ] = currentTimestamp.toISOString();
+
       let createAdvertisementAssetStatus = await AssetUtil.CreateAssetJson(
         ctx,
         advertisement_id,
-        assetJSON,
+        JSON.stringify(advertisementAssetJson),
         "Created Advertisement with id " + String(advertisement_id)
       );
       console.log("createAdvertisementAssetStatus");
